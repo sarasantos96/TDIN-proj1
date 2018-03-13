@@ -1,0 +1,9 @@
+C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Registry\bin\Debug\Registry.dll
+C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Registry\bin\Debug\Registry.pdb
+C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Registry\obj\Debug\User.csproj.CoreCompileInputs.cache
+C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Registry\obj\Debug\Registry.dll
+C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Registry\obj\Debug\Registry.pdb
+C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Registry\bin\Debug\Common.dll
+C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Registry\bin\Debug\Common.pdb
+C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Registry\obj\Debug\User.csprojResolveAssemblyReference.cache
+C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Registry\obj\Debug\User.csproj.CopyComplete
