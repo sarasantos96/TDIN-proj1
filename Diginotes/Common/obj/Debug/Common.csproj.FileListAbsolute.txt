@@ -1,6 +1,0 @@
-C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Common\bin\Debug\Common.dll
-C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Common\bin\Debug\Common.pdb
-C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Common\obj\Debug\Common.csproj.CoreCompileInputs.cache
-C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Common\obj\Debug\Common.dll
-C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Common\obj\Debug\Common.pdb
-C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Common\obj\Debug\Common.csprojResolveAssemblyReference.cache
