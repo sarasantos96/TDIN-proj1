@@ -13,11 +13,12 @@ namespace Registry
     public class Registry : MarshalByRefObject
     {
         ArrayList users = new ArrayList();
+        System.Data.SqlClient.SqlConnection con;
 
         public Registry()
         {
             Console.WriteLine("Registry constructor evoked");
-            loadUsers();
+            con = new System.Data.SqlClient.SqlConnection(Properties.Settings.Default.Database1);
         }
 
         public ArrayList getUsers()
@@ -31,22 +32,15 @@ namespace Registry
             Console.WriteLine("addUser() invoked");
             users.Add(user);
 
-            string u = user.Name + ";" + user.Pass + ";" + user.Quote+"\r\n";
-            var path = System.Reflection.Assembly.GetExecutingAssembly().Location;
-            var dir = System.IO.Path.GetDirectoryName(path) + "\\userlog.txt";
-            using (StreamWriter sw = File.AppendText(dir))
-            {
-                sw.Write(u);
-                sw.Close();
-            }
-
             //DATABASE
-            using (var db = new DatabaseContext())
-            {
-                var u1 = new Client{ Username = user.Name, Password = user.Pass};
-                db.Users.Add(u1);
-                db.SaveChanges();
-            }
+            System.Data.SqlClient.SqlCommand cmd = new System.Data.SqlClient.SqlCommand();
+            cmd.CommandType = System.Data.CommandType.Text;
+            cmd.CommandText = "INSERT [User] (Username, Password) VALUES ('" + user.Name + "', '" + user.Pass + "');";
+            cmd.Connection = con;
+
+            con.Open();
+            cmd.ExecuteNonQuery();
+            con.Close();
         }
 
         public Boolean CheckLogin(string user, string pass)
@@ -59,33 +53,5 @@ namespace Registry
 
             return false;
         }
-
-        public void loadUsers()
-        {
-            var path = System.Reflection.Assembly.GetExecutingAssembly().Location;
-            var dir = System.IO.Path.GetDirectoryName(path) + "\\userlog.txt";
-            string line;
-
-            if (!File.Exists(dir))
-            {
-                File.Create(dir).Dispose();
-            }
-            else
-            {
-                System.IO.StreamReader file = new StreamReader(dir);
-
-                if (file != null)
-                {
-                    while ((line = file.ReadLine()) != null)
-                    {
-                        string[] args = line.Split(';');
-                        User user = new User(args[0], args[1], Int32.Parse(args[2]));
-                        users.Add(user);
-                    }
-                }
-                file.Close();
-            }
-        }
-
     }
 }

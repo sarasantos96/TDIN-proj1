@@ -51,24 +51,10 @@ namespace Test
                 Console.WriteLine("User does not exist");
             }
             */
+            User user1 = new User("sara", "123", 0);
+            r.AddUser(user1);
 
-            using (var db = new DatabaseContext())
-            {
-                var u1 = new Client { Username = "teste", Password = "test1" };
-                db.Users.Add(u1);
-                db.SaveChanges();
 
-                // Display all Blogs from the database 
-                var query = from u in db.Users
-                            select u;
-
-                Console.WriteLine("All blogs in the database:");
-                foreach (var item in query)
-                {
-                    Console.WriteLine(item.Username);
-                }
-            }
-            
             Console.ReadLine();
         }
     }

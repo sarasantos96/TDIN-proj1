@@ -1,5 +1,0 @@
-C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Registry\bin\Debug\Registry.dll
-C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Registry\bin\Debug\Registry.pdb
-C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Registry\obj\Debug\Registry.csproj.CoreCompileInputs.cache
-C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Registry\obj\Debug\Registry.dll
-C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Registry\obj\Debug\Registry.pdb
