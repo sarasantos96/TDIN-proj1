@@ -39,6 +39,14 @@ namespace Registry
                 sw.Write(u);
                 sw.Close();
             }
+
+            //DATABASE
+            using (var db = new DatabaseContext())
+            {
+                var u1 = new Client{ Username = user.Name, Password = user.Pass};
+                db.Users.Add(u1);
+                db.SaveChanges();
+            }
         }
 
         public Boolean CheckLogin(string user, string pass)
