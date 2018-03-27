@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -12,7 +13,6 @@ namespace Registry
 {
     public class Registry : MarshalByRefObject
     {
-        ArrayList users = new ArrayList();
         System.Data.SqlClient.SqlConnection con;
 
         public Registry()
@@ -21,21 +21,15 @@ namespace Registry
             con = new System.Data.SqlClient.SqlConnection(Properties.Settings.Default.Database1);
         }
 
-        public ArrayList getUsers()
-        {
-            Console.WriteLine("getUsers() invoked");
-            return users;
-        }
-
         public void AddUser(User user)
         {
             Console.WriteLine("addUser() invoked");
-            users.Add(user);
+            string hashPass = User.GetHashString(user.Pass);
 
             //DATABASE
             System.Data.SqlClient.SqlCommand cmd = new System.Data.SqlClient.SqlCommand();
             cmd.CommandType = System.Data.CommandType.Text;
-            cmd.CommandText = "INSERT [User] (Username, Password) VALUES ('" + user.Name + "', '" + user.Pass + "');";
+            cmd.CommandText = "INSERT [User] (Username, Password, Name) VALUES ('" + user.Username + "', '" + hashPass+ "', '" + user.Name + "');";
             cmd.Connection = con;
 
             con.Open();
@@ -45,13 +39,25 @@ namespace Registry
 
         public Boolean CheckLogin(string user, string pass)
         {
-            foreach(User u in users)
+            Boolean log = false;
+            string hashPass = User.GetHashString(pass);
+
+            //DATABASE
+            System.Data.SqlClient.SqlCommand cmd = new System.Data.SqlClient.SqlCommand();
+            cmd.CommandType = System.Data.CommandType.Text;
+            cmd.CommandText = "SELECT Username, Password FROM [User] WHERE Username = '" + user+"' and Password='"+ hashPass +"'";
+            cmd.Connection = con;
+
+            con.Open();
+            SqlDataReader reader = cmd.ExecuteReader();
+
+            if (reader.HasRows)
             {
-                if (user.Equals(u.Name) && pass.Equals(u.Pass))
-                    return true;
+                log = true;
             }
 
-            return false;
+            con.Close();
+            return log;
         }
     }
 }

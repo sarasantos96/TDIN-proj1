@@ -28,10 +28,11 @@ namespace Client
         {
             TextBox usernameBox = this.Controls["usernameTextBox"] as TextBox;
             TextBox passwordBox = this.Controls["passwordTextBox"] as TextBox;
+            TextBox nameBox = this.Controls["nameTextBox"] as TextBox;
 
-            if(!usernameBox.Text.Equals("") && !passwordBox.Text.Equals(""))
+            if(!usernameBox.Text.Equals("") && !passwordBox.Text.Equals("") && !nameBox.Text.Equals(""))
             {
-                r.AddUser(new User(usernameBox.Text, passwordBox.Text, 0));
+                r.AddUser(new User(usernameBox.Text, passwordBox.Text, nameBox.Text));
                 this.Close();
                 new Diginotes().Show();
             }
