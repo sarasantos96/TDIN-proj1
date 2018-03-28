@@ -15,11 +15,11 @@ namespace Client
 {
     public partial class Diginotes : Form
     {
-        Registry.Registry r;
+        IRegistry r;
         public Diginotes()
         {
             InitializeComponent();
-            r = new Registry.Registry();
+            r = (IRegistry)RemoteNew.New(typeof(IRegistry));
             this.Text = "Diginotes";
             TextBox passwordBox = this.Controls["textboxpassword"] as TextBox;
             passwordBox.PasswordChar = '*';

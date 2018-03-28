@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Runtime.Remoting;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -33,5 +35,57 @@ namespace Common
             return sb.ToString();
         }
 
+    }
+
+    public class RemoteNew
+    {
+        private static Hashtable types = null;
+
+        private static void InitTypeTable()
+        {
+            types = new Hashtable();
+            foreach (WellKnownClientTypeEntry entry in RemotingConfiguration.GetRegisteredWellKnownClientTypes())
+                types.Add(entry.ObjectType, entry);
+        }
+
+        public static object New(Type type)
+        {
+            if (types == null)
+                InitTypeTable();
+            WellKnownClientTypeEntry entry = (WellKnownClientTypeEntry)types[type];
+            if (entry == null)
+                throw new RemotingException("Type not found!");
+            return RemotingServices.Connect(type, entry.ObjectUrl);
+        }
+    }
+
+    public interface IRegistry
+    {
+        event QuoteChangedEvent QuoteChanged;
+        void AddUser(User user);
+        Boolean CheckLogin(string user, string pass);
+        int GetQuote();
+        void SetQuote(int quote);
+    }
+
+    public delegate void QuoteChangedEvent(int quote);
+
+    public class EventIntermediate : MarshalByRefObject
+    {
+        public event QuoteChangedEvent newQuote;
+        public override object InitializeLifetimeService()
+        {
+            return null;
+        }
+
+        public EventIntermediate(IRegistry server)
+        {
+            server.QuoteChanged += FireChangedQuote;
+        }
+
+        public void FireChangedQuote(int quote)
+        {
+            newQuote(quote);
+        }
     }
 }

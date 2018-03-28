@@ -31,6 +31,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
+            this.quoteValueLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -61,11 +62,22 @@
             this.button2.Text = "Sell Diginotes";
             this.button2.UseVisualStyleBackColor = true;
             // 
+            // quoteValueLabel
+            // 
+            this.quoteValueLabel.AutoSize = true;
+            this.quoteValueLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.quoteValueLabel.Location = new System.Drawing.Point(147, 39);
+            this.quoteValueLabel.Name = "quoteValueLabel";
+            this.quoteValueLabel.Size = new System.Drawing.Size(64, 25);
+            this.quoteValueLabel.TabIndex = 3;
+            this.quoteValueLabel.Text = "label2";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(564, 288);
+            this.Controls.Add(this.quoteValueLabel);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label1);
@@ -81,5 +93,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Label quoteValueLabel;
     }
 }

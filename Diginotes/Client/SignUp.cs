@@ -15,10 +15,11 @@ namespace Client
 {
     public partial class SignUp : Form
     {
-        Registry.Registry r = new Registry.Registry();
+        IRegistry r;
         public SignUp()
         {
             InitializeComponent();
+            r = (IRegistry)RemoteNew.New(typeof(IRegistry));
             this.Text = "Sign Up";
             TextBox passwordBox = this.Controls["passwordTextBox"] as TextBox;
             passwordBox.PasswordChar = '*';
