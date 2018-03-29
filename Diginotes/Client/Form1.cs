@@ -32,9 +32,10 @@ namespace Client
 
         void OnQuoteChanged(int quote)
         {
+            //Labels can't be modified in a different thread they were created
             if (this.quoteLabel.InvokeRequired)
             {
-                this.quoteLabel.BeginInvoke((MethodInvoker)delegate () { this.quoteLabel.Text = quote.ToString(); ; });
+                this.quoteLabel.BeginInvoke((MethodInvoker)delegate () { this.quoteLabel.Text = quote.ToString(); });
             }
             else
             {

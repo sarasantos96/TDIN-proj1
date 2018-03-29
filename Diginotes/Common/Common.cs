@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.Remoting;
 using System.Security.Cryptography;
 using System.Text;
@@ -37,6 +38,21 @@ namespace Common
 
     }
 
+    [Serializable]
+    public class Diginote
+    {
+        public string SerialNumber { get; set; }
+        public int FacialValue { get; set; }
+        public User Owner { get; set; }
+
+        public Diginote(string serialNumber, User owner)
+        {
+            SerialNumber = serialNumber;
+            FacialValue = 1;
+            Owner = owner;
+        }
+    }
+
     public class RemoteNew
     {
         private static Hashtable types = null;
@@ -66,6 +82,8 @@ namespace Common
         Boolean CheckLogin(string user, string pass);
         int GetQuote();
         void SetQuote(int quote);
+        void CreateDiginote(string serialNumber, User owner);
+        List<Diginote> GetUserDiginotes(User user);
     }
 
     public delegate void QuoteChangedEvent(int quote);
