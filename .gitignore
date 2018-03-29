@@ -39,3 +39,8 @@ Diginotes/Registry/bin/Debug/
 *.xaml
 
 Diginotes/Diginotes/obj/Debug/
+Diginotes/Registry/App\.config
+
+Diginotes/Registry/Properties/Settings\.Designer\.cs
+
+Diginotes/Registry/Properties/Settings\.settings
