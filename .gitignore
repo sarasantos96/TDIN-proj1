@@ -44,3 +44,7 @@ Diginotes/Registry/App\.config
 Diginotes/Registry/Properties/Settings\.Designer\.cs
 
 Diginotes/Registry/Properties/Settings\.settings
+
+Diginotes/Client/bin/Debug/Registry\.dll\.config
+
+Diginotes/Test/bin/Debug/Registry\.dll\.config

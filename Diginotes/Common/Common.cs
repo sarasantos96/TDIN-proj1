@@ -53,6 +53,23 @@ namespace Common
         }
     }
 
+    public enum OrderType { SELL, PURCHASE };
+
+    [Serializable]
+    public class Order
+    {
+        public OrderType Type;
+        public User Owner;
+        public int Quantity;
+
+        public Order(OrderType type, User user, int quantity)
+        {
+            Type = type;
+            Owner = user;
+            Quantity = quantity;
+        }
+    }
+
     public class RemoteNew
     {
         private static Hashtable types = null;
@@ -84,6 +101,8 @@ namespace Common
         void SetQuote(int quote);
         void CreateDiginote(string serialNumber, User owner);
         List<Diginote> GetUserDiginotes(User user);
+        void AddOrder(Order order);
+        List<Order> GetOrders();
     }
 
     public delegate void QuoteChangedEvent(int quote);

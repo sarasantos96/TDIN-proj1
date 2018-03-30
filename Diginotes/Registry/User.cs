@@ -15,6 +15,7 @@ namespace Registry
     public class Registry : MarshalByRefObject, IRegistry
     {
         public event QuoteChangedEvent QuoteChanged;
+        public List<Order> orders;
 
         System.Data.SqlClient.SqlConnection con;
         int quote;
@@ -29,6 +30,7 @@ namespace Registry
             Console.WriteLine("Registry constructor evoked");
             con = new System.Data.SqlClient.SqlConnection(Properties.Settings.Default.Database1);
             quote = 1;
+            orders = new List<Order>();
         }
 
         public void AddUser(User user)
@@ -234,6 +236,48 @@ namespace Registry
             }
 
             return diginotes;
+        }
+
+        public List<Order> GetOrders()
+        {
+            return orders;
+        }
+
+        public void AddOrder(Order order)
+        {
+            Boolean FoundTransaction = false;
+            if (!orders.Any())
+            {
+                orders.Add(order);
+            }
+            else
+            {
+                foreach(Order el in orders)
+                {
+                    if(el.Type != order.Type && el.Owner != order.Owner)
+                    {
+                        FoundTransaction = true;
+                        int aux = order.Quantity;
+                        order.Quantity = order.Quantity - el.Quantity;
+                        el.Quantity = el.Quantity - aux;
+                        //TODO fazer a transação
+                        break;
+                    }
+                }
+
+                if (!FoundTransaction)
+                {
+                    orders.Add(order);
+                }
+                else
+                {
+                    orders.RemoveAll(o => o.Quantity <= 0);
+                    if (order.Quantity > 0)
+                    {
+                        AddOrder(order);
+                    }
+                }
+            }
         }
     }
 }
