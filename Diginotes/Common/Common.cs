@@ -94,7 +94,7 @@ namespace Common
 
     public interface IRegistry
     {
-        event QuoteChangedEvent QuoteChanged;
+        event ChangeEventHandler ChangedEvent;
         Boolean AddUser(User user);
         User CheckLogin(string user, string pass);
         int GetQuote();
@@ -106,11 +106,34 @@ namespace Common
         List<Order> GetUserPendingOrders(User user);
     }
 
-    public delegate void QuoteChangedEvent(int quote);
+    public enum EventType { QuoteChanged, NewOrder, CompleteOrder, NewMessage};
+
+    [Serializable]
+    public class EventItem
+    {
+        public EventType Type { get; set; }
+        public int Quote { get; set; }
+        public Order Order { get; set; }
+
+        public EventItem(EventType type, int quote)
+        {
+            Type = type;
+            Quote = quote;
+            Order = null;
+        }
+        public EventItem(EventType type, Order order)
+        {
+            Type = type;
+            Quote = -1;
+            Order = order;
+        }
+    }
+
+    public delegate void ChangeEventHandler(EventItem item);
 
     public class EventIntermediate : MarshalByRefObject
     {
-        public event QuoteChangedEvent newQuote;
+        public event ChangeEventHandler newEvent;
         public override object InitializeLifetimeService()
         {
             return null;
@@ -118,12 +141,12 @@ namespace Common
 
         public EventIntermediate(IRegistry server)
         {
-            server.QuoteChanged += FireChangedQuote;
+            server.ChangedEvent += FireChangedQuote;
         }
 
-        public void FireChangedQuote(int quote)
+        public void FireChangedQuote(EventItem item)
         {
-            newQuote(quote);
+            newEvent(item);
         }
     }
 }

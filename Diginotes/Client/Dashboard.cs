@@ -9,7 +9,7 @@ namespace Client
         IRegistry r;
         User UserLogged;
         EventIntermediate intermediate;
-        Label QuoteLabel;
+
         public Dashboard(User user)
         {
             this.Text = "Diginotes";
@@ -18,11 +18,10 @@ namespace Client
             UserLogged = user;
             r = (IRegistry)RemoteNew.New(typeof(IRegistry));
             intermediate = new EventIntermediate(r);
-            intermediate.newQuote += OnQuoteChanged;
+            intermediate.newEvent += OnChangeEvent;
 
             //Set initial quote value
-            QuoteLabel = (Label)this.Controls["quoteLabelValue"] as Label;
-            QuoteLabel.Text = r.GetQuote().ToString();
+            quoteLabelValue.Text = r.GetQuote().ToString();
 
             //Set inital pending orders
             List<Order> pendingOrders = r.GetUserPendingOrders(UserLogged);
@@ -34,18 +33,63 @@ namespace Client
             }
         }
 
+        void OnChangeEvent(EventItem item)
+        {
+            switch (item.Type)
+            {
+                case EventType.QuoteChanged:
+                    OnQuoteChanged(item.Quote);
+                    break;
+
+                case EventType.NewOrder:
+                    if (item.Order.Owner.Username.Equals(UserLogged.Username))
+                    {
+                        OnNewOrder(item.Order);
+                    }
+                    break;
+
+                case EventType.CompleteOrder:
+                    if (item.Order.Owner.Username.Equals(UserLogged.Username))
+                    {
+
+                    }
+                    break;
+
+                case EventType.NewMessage:
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
         void OnQuoteChanged(int quote)
         {
             //Labels can't be modified in a different thread they were created
-            if (this.QuoteLabel.InvokeRequired)
+            if (quoteLabelValue.InvokeRequired)
             {
-                this.QuoteLabel.BeginInvoke((MethodInvoker)delegate () { this.QuoteLabel.Text = quote.ToString(); });
+                quoteLabelValue.BeginInvoke((MethodInvoker)delegate () { quoteLabelValue.Text = quote.ToString(); });
             }
             else
             {
-                this.QuoteLabel.Text = quote.ToString();
+                quoteLabelValue.Text = quote.ToString();
             }
 
+        }
+
+        void OnNewOrder(Order order)
+        {
+            ListViewItem i = new ListViewItem(order.Type.ToString());
+            i.SubItems.Add(order.Quantity.ToString());
+
+            if (pendingView.InvokeRequired)
+            {
+                pendingView.BeginInvoke((MethodInvoker)delegate () { pendingView.Items.Add(i); });
+            }
+            else
+            {
+                pendingView.Items.Add(i);
+            }
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

@@ -14,7 +14,7 @@ namespace Registry
 {
     public class Registry : MarshalByRefObject, IRegistry
     {
-        public event QuoteChangedEvent QuoteChanged;
+        public event ChangeEventHandler ChangedEvent;
         public List<Order> orders;
 
         System.Data.SqlClient.SqlConnection con;
@@ -138,27 +138,29 @@ namespace Registry
         public void SetQuote(int quote)
         {
             this.quote = quote;
-            NotifyClients(quote);
+            EventItem item = new EventItem(EventType.QuoteChanged, quote);
+            NotifyClients(item);
         }
 
-        void NotifyClients(int quote)
+        void NotifyClients(EventItem item)
         {
-            if(QuoteChanged != null)
+            if(ChangedEvent != null)
             {
-                Delegate[] delagates = QuoteChanged.GetInvocationList();
+                Delegate[] delagates = ChangedEvent.GetInvocationList();
 
-                foreach(QuoteChangedEvent del in delagates)
+                foreach(ChangeEventHandler del in delagates)
                 {
                     new Thread(() => {
                         try
                         {
-                            del(quote);
+                            del(item);
                             Console.WriteLine("Invoking event handler");
                         }
-                        catch (Exception)
+                        catch (Exception e)
                         {
-                            QuoteChanged -= del;
+                            ChangedEvent -= del;
                             Console.WriteLine("Exception: Removed an event handler");
+                            Console.WriteLine("Exception: " + e.Message);
                         }
                     }).Start();
                 }
@@ -253,6 +255,8 @@ namespace Registry
             if (!orders.Any())
             {
                 orders.Add(order);
+                EventItem item = new EventItem(EventType.NewOrder, order);
+                NotifyClients(item);
             }
             else
             {
@@ -272,6 +276,8 @@ namespace Registry
                 if (!FoundTransaction)
                 {
                     orders.Add(order);
+                    EventItem item = new EventItem(EventType.NewOrder, order);
+                    NotifyClients(item);
                 }
                 else
                 {
