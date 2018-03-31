@@ -95,14 +95,15 @@ namespace Common
     public interface IRegistry
     {
         event QuoteChangedEvent QuoteChanged;
-        void AddUser(User user);
-        Boolean CheckLogin(string user, string pass);
+        Boolean AddUser(User user);
+        User CheckLogin(string user, string pass);
         int GetQuote();
         void SetQuote(int quote);
         void CreateDiginote(string serialNumber, User owner);
         List<Diginote> GetUserDiginotes(User user);
         void AddOrder(Order order);
         List<Order> GetOrders();
+        List<Order> GetUserPendingOrders(User user);
     }
 
     public delegate void QuoteChangedEvent(int quote);

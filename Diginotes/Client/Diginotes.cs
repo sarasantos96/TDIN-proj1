@@ -18,6 +18,7 @@ namespace Client
         IRegistry r;
         public Diginotes()
         {
+            this.Text = "Diginotes - Login";
             InitializeComponent();
             r = (IRegistry)RemoteNew.New(typeof(IRegistry));
             this.Text = "Diginotes";
@@ -27,20 +28,20 @@ namespace Client
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Boolean logResult = false;
+            User logResult = null;
             TextBox usernameBox = this.Controls["textboxusername"] as TextBox;
             TextBox passwordBox = this.Controls["textboxpassword"] as TextBox;
             if (!usernameBox.Text.Equals("") && !passwordBox.Text.Equals(""))
                 logResult = r.CheckLogin(usernameBox.Text, passwordBox.Text);
 
-            if (logResult)
+            if (logResult != null)
             {
                 this.Close();
-                new Form1().Show();
+                new Dashboard(logResult).Show();
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             this.Close();
             new SignUp().Show();

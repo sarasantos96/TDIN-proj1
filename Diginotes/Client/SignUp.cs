@@ -33,9 +33,12 @@ namespace Client
 
             if(!usernameBox.Text.Equals("") && !passwordBox.Text.Equals("") && !nameBox.Text.Equals(""))
             {
-                r.AddUser(new User(usernameBox.Text, passwordBox.Text, nameBox.Text));
-                this.Close();
-                new Diginotes().Show();
+                Boolean success = r.AddUser(new User(usernameBox.Text, passwordBox.Text, nameBox.Text));
+                if (success)
+                {
+                    this.Close();
+                    new Diginotes().Show();
+                }              
             }
         }
     }

@@ -33,7 +33,7 @@ namespace Registry
             orders = new List<Order>();
         }
 
-        public void AddUser(User user)
+        public Boolean AddUser(User user)
         {
             Console.WriteLine("addUser() invoked");
             string hashPass = User.GetHashString(user.Pass);
@@ -55,13 +55,14 @@ namespace Registry
                     con.Close();
 
                 Console.WriteLine("[AddUser] Exeception Caught: " + e.Message);
+                return false;
             }
-            
+            return true;
         }
 
-        public Boolean CheckLogin(string user, string pass)
+        public User CheckLogin(string user, string pass)
         {
-            Boolean log = false;
+            User log = null;
             string hashPass = User.GetHashString(pass);
 
             try
@@ -69,17 +70,20 @@ namespace Registry
                 //DATABASE
                 System.Data.SqlClient.SqlCommand cmd = new System.Data.SqlClient.SqlCommand();
                 cmd.CommandType = System.Data.CommandType.Text;
-                cmd.CommandText = "SELECT Username, Password FROM [User] WHERE Username = '" + user + "' and Password='" + hashPass + "'";
+                cmd.CommandText = "SELECT Username, Password, Name FROM [User] WHERE Username = '" + user + "' and Password='" + hashPass + "'";
                 cmd.Connection = con;
 
                 con.Open();
                 SqlDataReader reader = cmd.ExecuteReader();
 
-                if (reader.HasRows)
+                if (!reader.HasRows)
                 {
-                    log = true;
+                    return null;  
                 }
 
+                reader.Read();
+                log = new User(reader.GetString(0), reader.GetString(1), reader.GetString(2));
+                reader.Close();
                 con.Close();               
             }
             catch(Exception e)
@@ -278,6 +282,19 @@ namespace Registry
                     }
                 }
             }
+        }
+
+        public List<Order> GetUserPendingOrders(User user)
+        {
+            List<Order> pending = new List<Order>();
+
+            foreach(Order order in this.orders)
+            {
+                if (order.Owner.Username.Equals(user.Username))
+                    pending.Add(order);
+            }
+
+            return pending;
         }
     }
 }

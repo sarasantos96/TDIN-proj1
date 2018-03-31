@@ -22,11 +22,11 @@ namespace Test
             /* r.AddUser(user1);
              r.AddUser(user2);*/
 
-            Boolean check1 = r.CheckLogin("sara","123");
-            Boolean check2 = r.CheckLogin("joao","123");
+            User check1 = r.CheckLogin("sara","123");
+            User check2 = r.CheckLogin("joao","123");
 
-            if (check1) Console.WriteLine("Login 1 sucessfull");
-            if (check2) Console.WriteLine("Login 2 sucessfull");
+            if (check1 != null) Console.WriteLine("Login 1 sucessfull");
+            if (check2 != null) Console.WriteLine("Login 2 sucessfull");
 
             r.SetQuote(2);
             Console.WriteLine("Quote changed...");
