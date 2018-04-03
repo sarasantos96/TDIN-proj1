@@ -51,7 +51,7 @@ namespace Client
                 case EventType.CompleteOrder:
                     if (item.Order.Owner.Username.Equals(UserLogged.Username))
                     {
-
+                        OnNewOrder(new Order(OrderType.SELL, UserLogged,-1));
                     }
                     break;
 

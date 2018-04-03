@@ -260,6 +260,7 @@ namespace Registry
             }
             else
             {
+                int i = 0;
                 foreach(Order el in orders)
                 {
                     if(el.Type != order.Type && el.Owner != order.Owner)
@@ -267,10 +268,21 @@ namespace Registry
                         FoundTransaction = true;
                         int aux = order.Quantity;
                         order.Quantity = order.Quantity - el.Quantity;
-                        el.Quantity = el.Quantity - aux;
+                        int temp = el.Quantity - aux;
+                        if(temp > 0)
+                        {
+                            EventItem item = new EventItem(EventType.CompleteOrder, el);
+                            NotifyClients(item);
+                            orders.RemoveAt(i);
+                            el.Quantity = temp;
+                            orders.Add(el);
+                            item = new EventItem(EventType.NewOrder, el);
+                            NotifyClients(item);
+                        }
                         //TODO fazer a transação
                         break;
                     }
+                    i++;
                 }
 
                 if (!FoundTransaction)

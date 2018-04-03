@@ -43,19 +43,19 @@ namespace Test
                 Console.WriteLine("Diginote " + d.SerialNumber);
             }*/
 
-            Order order1 = new Order(OrderType.PURCHASE, user1, 10);
+            Order order1 = new Order(OrderType.PURCHASE, user1, 20);
             Order order2 = new Order(OrderType.PURCHASE, user1, 10);
             Order order3 = new Order(OrderType.PURCHASE, user1, 10);
             Order order4 = new Order(OrderType.PURCHASE, user1, 10);
-            Order order5 = new Order(OrderType.PURCHASE, user1, 10);
+            Order order5 = new Order(OrderType.SELL, user2, 10);
             Order order6 = new Order(OrderType.SELL, user2, 60);
             r.AddOrder(order1);
-            r.AddOrder(order2);
+           /* r.AddOrder(order2);
             r.AddOrder(order3);
-            r.AddOrder(order4);
-            r.AddOrder(order5);
+            r.AddOrder(order4);*/
+            r.AddOrder(order2);
 
-            Console.WriteLine("Orders:");
+           /* Console.WriteLine("Orders:");
             foreach (Order o in r.GetOrders())
             {
                 Console.WriteLine("User " + o.Owner.Name + ", quantity=" + o.Quantity);
@@ -69,7 +69,7 @@ namespace Test
             {
                 Console.WriteLine("User " + o.Owner.Name + ", quantity=" + o.Quantity);
             }
-
+            */
             Console.ReadLine();
         }
     }
