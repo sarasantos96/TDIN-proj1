@@ -59,7 +59,9 @@ namespace Client
                 case EventType.IncompleteOrder:
                     if (item.Order.Owner.Username.Equals(UserLogged.Username))
                     {
-
+                        //TODO: change to handle incomplete events
+                        OnCompleteOrder(item.Order);
+                        OnNewOrder(item.Order);
                     }
                     break;
 
@@ -123,7 +125,7 @@ namespace Client
             int i = 0;
             foreach (Order o in pendingOrders)
             {
-                if (o.Owner.Username.Equals(order.Owner.Username) && o.Quantity == order.Quantity && o.Type == order.Type)
+                if (o.Owner.Username.Equals(order.Owner.Username) && o.Timestamp == order.Timestamp && o.Type == order.Type)
                     return i;
                 i++;
             }

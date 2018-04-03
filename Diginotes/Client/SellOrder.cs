@@ -29,7 +29,14 @@ namespace Client
             maxQuantity = r.GetUserDiginotes(User).Count;
 
             numericUpDown1.Maximum = maxQuantity;
-            numericUpDown1.Minimum = 0;
+            numericUpDown1.Minimum = 1;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            int qnt = (int) numericUpDown1.Value;
+            r.AddOrder(new Order(OrderType.SELL, User, qnt));
+            this.Close();
         }
     }
 }

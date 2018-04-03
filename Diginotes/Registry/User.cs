@@ -78,6 +78,7 @@ namespace Registry
 
                 if (!reader.HasRows)
                 {
+                    con.Close();
                     return null;  
                 }
 
@@ -112,6 +113,7 @@ namespace Registry
                 SqlDataReader reader = cmd.ExecuteReader();
                 if (!reader.HasRows)
                 {
+                    con.Close();
                     return -1;
                 }
 
@@ -231,7 +233,9 @@ namespace Registry
                         diginote = new Diginote(reader.GetString(0), user);
                         diginotes.Add(diginote);
                     }
+                    reader.Close();
                 }
+                con.Close();
             }
             catch(Exception e)
             {
@@ -240,6 +244,8 @@ namespace Registry
 
                 Console.WriteLine("[GetUserDiginotes] Exeception Caught: " + e.Message);
             }
+
+            Console.WriteLine("GetUser diginotes of " + user.Username + " total: " + diginotes.Count());
 
             return diginotes;
         }
@@ -262,7 +268,7 @@ namespace Registry
                 int i = 0;
                 foreach(Order el in orders)
                 {
-                    if(el.Type != order.Type && el.Owner != order.Owner)
+                    if(el.Type != order.Type && !el.Owner.Username.Equals(order.Owner.Username))
                     {
                         FoundTransaction = true;
                         int aux = order.Quantity;
@@ -273,7 +279,7 @@ namespace Registry
                         {                            
                             el.Quantity = temp;
                             orders.Add(el);
-                            NotifyNewOrder(el);
+                            NotifyIncompleteOrder(el);
                         }
                         else
                         {
@@ -283,6 +289,8 @@ namespace Registry
                         break;
                     }
                     i++;
+                    if (order.Quantity <= 0)
+                        break;
                 }
 
                 if (!FoundTransaction)

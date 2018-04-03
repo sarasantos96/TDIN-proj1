@@ -61,12 +61,14 @@ namespace Common
         public OrderType Type;
         public User Owner;
         public int Quantity;
+        public DateTime Timestamp;
 
         public Order(OrderType type, User user, int quantity)
         {
             Type = type;
             Owner = user;
             Quantity = quantity;
+            Timestamp = DateTime.Now;
         }
     }
 
