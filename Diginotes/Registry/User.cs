@@ -18,7 +18,7 @@ namespace Registry
         public List<Order> orders;
 
         System.Data.SqlClient.SqlConnection con;
-        int quote;
+        float quote;
 
         public override object InitializeLifetimeService()
         {
@@ -132,12 +132,12 @@ namespace Registry
             return id;
         }
 
-        public int GetQuote()
+        public float GetQuote()
         {
             return quote;
         }
 
-        public void SetQuote(int quote)
+        public void SetQuote(float quote)
         {
             this.quote = quote;
             EventItem item = new EventItem(EventType.QuoteChanged, quote);
@@ -403,6 +403,23 @@ namespace Registry
             }
 
             return success;
-        }      
+        }
+        
+        public void cancelPendingOrder(Order order)
+        {
+            int i = 0;
+            foreach(Order o in new List<Order>(orders))
+            {
+                if (o.Owner.Username.Equals(order.Owner.Username) && o.Timestamp == order.Timestamp)
+                    orders.RemoveAt(i);
+                i++;
+            }
+        }
+
+        public void NotifyDeleteOrder(Order order)
+        {
+            EventItem item = new EventItem(EventType.DeleteOrder, order);
+            NotifyClients(item);
+        }
     }
 }

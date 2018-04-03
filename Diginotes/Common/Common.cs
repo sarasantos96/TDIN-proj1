@@ -99,25 +99,27 @@ namespace Common
         event ChangeEventHandler ChangedEvent;
         Boolean AddUser(User user);
         User CheckLogin(string user, string pass);
-        int GetQuote();
-        void SetQuote(int quote);
+        float GetQuote();
+        void SetQuote(float quote);
         void CreateDiginote(string serialNumber, User owner);
         List<Diginote> GetUserDiginotes(User user);
         void AddOrder(Order order);
         List<Order> GetOrders();
         List<Order> GetUserPendingOrders(User user);
+        void cancelPendingOrder(Order order);
+        void NotifyDeleteOrder(Order order);
     }
 
-    public enum EventType { QuoteChanged, NewOrder, CompleteOrder, IncompleteOrder,NewMessage};
+    public enum EventType { QuoteChanged, NewOrder, CompleteOrder, IncompleteOrder,NewMessage, DeleteOrder};
 
     [Serializable]
     public class EventItem
     {
         public EventType Type { get; set; }
-        public int Quote { get; set; }
+        public float Quote { get; set; }
         public Order Order { get; set; }
 
-        public EventItem(EventType type, int quote)
+        public EventItem(EventType type, float quote)
         {
             Type = type;
             Quote = quote;

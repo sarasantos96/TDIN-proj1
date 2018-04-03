@@ -25,6 +25,7 @@ namespace Client
 
             Label totalLabel = this.Controls["totalLabel"] as Label;
             totalLabel.Text = diginotes.Count.ToString();
+            balanceLabel.Text = (diginotes.Count * r.GetQuote()).ToString() + "€";
         }
 
         private void button1_Click(object sender, EventArgs e)

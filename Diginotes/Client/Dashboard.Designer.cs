@@ -41,6 +41,8 @@
             this.Quantity = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.messageView = new System.Windows.Forms.ListView();
             this.Messages = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.changeOfferButton = new System.Windows.Forms.Button();
+            this.cancelOrderButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -111,7 +113,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(444, 77);
+            this.label4.Location = new System.Drawing.Point(444, 49);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(134, 17);
             this.label4.TabIndex = 7;
@@ -125,7 +127,7 @@
             this.pendingView.FullRowSelect = true;
             this.pendingView.GridLines = true;
             this.pendingView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.pendingView.Location = new System.Drawing.Point(447, 109);
+            this.pendingView.Location = new System.Drawing.Point(447, 77);
             this.pendingView.Name = "pendingView";
             this.pendingView.Size = new System.Drawing.Size(314, 239);
             this.pendingView.TabIndex = 8;
@@ -149,7 +151,7 @@
             this.messageView.GridLines = true;
             this.messageView.Location = new System.Drawing.Point(25, 188);
             this.messageView.Name = "messageView";
-            this.messageView.Size = new System.Drawing.Size(366, 160);
+            this.messageView.Size = new System.Drawing.Size(366, 172);
             this.messageView.TabIndex = 9;
             this.messageView.UseCompatibleStateImageBehavior = false;
             this.messageView.View = System.Windows.Forms.View.SmallIcon;
@@ -159,11 +161,33 @@
             this.Messages.Text = "Messages";
             this.Messages.Width = 334;
             // 
+            // changeOfferButton
+            // 
+            this.changeOfferButton.Location = new System.Drawing.Point(447, 324);
+            this.changeOfferButton.Name = "changeOfferButton";
+            this.changeOfferButton.Size = new System.Drawing.Size(155, 36);
+            this.changeOfferButton.TabIndex = 10;
+            this.changeOfferButton.Text = "Change Offer";
+            this.changeOfferButton.UseVisualStyleBackColor = true;
+            this.changeOfferButton.Click += new System.EventHandler(this.changeOfferButton_Click);
+            // 
+            // cancelOrderButton
+            // 
+            this.cancelOrderButton.Location = new System.Drawing.Point(608, 324);
+            this.cancelOrderButton.Name = "cancelOrderButton";
+            this.cancelOrderButton.Size = new System.Drawing.Size(153, 36);
+            this.cancelOrderButton.TabIndex = 11;
+            this.cancelOrderButton.Text = "Cancel Order";
+            this.cancelOrderButton.UseVisualStyleBackColor = true;
+            this.cancelOrderButton.Click += new System.EventHandler(this.cancelOrderButton_Click);
+            // 
             // Dashboard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 389);
+            this.Controls.Add(this.cancelOrderButton);
+            this.Controls.Add(this.changeOfferButton);
             this.Controls.Add(this.messageView);
             this.Controls.Add(this.pendingView);
             this.Controls.Add(this.label4);
@@ -195,5 +219,7 @@
         private System.Windows.Forms.ColumnHeader Quantity;
         private System.Windows.Forms.ListView messageView;
         private System.Windows.Forms.ColumnHeader Messages;
+        private System.Windows.Forms.Button changeOfferButton;
+        private System.Windows.Forms.Button cancelOrderButton;
     }
 }

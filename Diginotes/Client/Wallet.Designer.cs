@@ -35,6 +35,8 @@
             this.totalLabel = new System.Windows.Forms.Label();
             this.listView = new System.Windows.Forms.ListView();
             this.SerialNumber = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.label3 = new System.Windows.Forms.Label();
+            this.balanceLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -59,7 +61,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(195, 292);
+            this.button1.Location = new System.Drawing.Point(183, 307);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(89, 43);
             this.button1.TabIndex = 3;
@@ -70,7 +72,7 @@
             // totalLabel
             // 
             this.totalLabel.AutoSize = true;
-            this.totalLabel.Location = new System.Drawing.Point(105, 264);
+            this.totalLabel.Location = new System.Drawing.Point(104, 264);
             this.totalLabel.Name = "totalLabel";
             this.totalLabel.Size = new System.Drawing.Size(16, 17);
             this.totalLabel.TabIndex = 4;
@@ -94,11 +96,32 @@
             this.SerialNumber.Text = "Serial Number";
             this.SerialNumber.Width = 200;
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold);
+            this.label3.Location = new System.Drawing.Point(135, 264);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(71, 17);
+            this.label3.TabIndex = 6;
+            this.label3.Text = "Balance:";
+            // 
+            // balanceLabel
+            // 
+            this.balanceLabel.AutoSize = true;
+            this.balanceLabel.Location = new System.Drawing.Point(212, 264);
+            this.balanceLabel.Name = "balanceLabel";
+            this.balanceLabel.Size = new System.Drawing.Size(16, 17);
+            this.balanceLabel.TabIndex = 7;
+            this.balanceLabel.Text = "0";
+            // 
             // Wallet
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(480, 356);
+            this.ClientSize = new System.Drawing.Size(471, 367);
+            this.Controls.Add(this.balanceLabel);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.listView);
             this.Controls.Add(this.totalLabel);
             this.Controls.Add(this.button1);
@@ -120,5 +143,7 @@
         private System.Windows.Forms.Label totalLabel;
         private System.Windows.Forms.ListView listView;
         private System.Windows.Forms.ColumnHeader SerialNumber;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label balanceLabel;
     }
 }

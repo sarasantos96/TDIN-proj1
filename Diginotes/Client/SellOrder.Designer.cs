@@ -35,6 +35,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.label4 = new System.Windows.Forms.Label();
+            this.priceLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -79,7 +81,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(147, 173);
+            this.button1.Location = new System.Drawing.Point(147, 213);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(123, 49);
             this.button1.TabIndex = 4;
@@ -93,12 +95,33 @@
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(120, 22);
             this.numericUpDown1.TabIndex = 5;
+            this.numericUpDown1.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(68, 170);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(48, 17);
+            this.label4.TabIndex = 6;
+            this.label4.Text = "Price: ";
+            // 
+            // priceLabel
+            // 
+            this.priceLabel.AutoSize = true;
+            this.priceLabel.Location = new System.Drawing.Point(200, 169);
+            this.priceLabel.Name = "priceLabel";
+            this.priceLabel.Size = new System.Drawing.Size(16, 17);
+            this.priceLabel.TabIndex = 7;
+            this.priceLabel.Text = "0";
             // 
             // SellOrder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(430, 245);
+            this.ClientSize = new System.Drawing.Size(422, 286);
+            this.Controls.Add(this.priceLabel);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.numericUpDown1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label3);
@@ -122,5 +145,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label priceLabel;
     }
 }

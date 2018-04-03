@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using Common;
 
@@ -10,6 +12,7 @@ namespace Client
         User UserLogged;
         EventIntermediate intermediate;
         List<Order> pendingOrders;
+        Boolean changedOffer;
 
         public Dashboard(User user)
         {
@@ -17,6 +20,7 @@ namespace Client
             InitializeComponent();
 
             UserLogged = user;
+            changedOffer = false;
             r = (IRegistry)RemoteNew.New(typeof(IRegistry));
             intermediate = new EventIntermediate(r);
             intermediate.newEvent += OnChangeEvent;
@@ -68,21 +72,46 @@ namespace Client
                 case EventType.NewMessage:
                     break;
 
+                case EventType.DeleteOrder:
+                    if (item.Order.Owner.Username.Equals(UserLogged.Username))
+                    {
+                        DeleteOrder(item.Order);
+                    }
+                    break;
+
                 default:
                     break;
             }
         }
 
-        void OnQuoteChanged(int quote)
+        void OnQuoteChanged(float quote)
         {
             //Labels can't be modified in a different thread they were created
             if (quoteLabelValue.InvokeRequired)
             {
-                quoteLabelValue.BeginInvoke((MethodInvoker)delegate () { quoteLabelValue.Text = quote.ToString(); });
+                quoteLabelValue.BeginInvoke((MethodInvoker)delegate () {
+                    quoteLabelValue.Text = quote.ToString();
+                    if (pendingOrders.Any() && !changedOffer)
+                    {
+                        new ConfirmOrders(UserLogged).ShowDialog();
+                    }
+                    else
+                    {
+                        changedOffer = false;
+                    }
+                });
             }
             else
             {
                 quoteLabelValue.Text = quote.ToString();
+                if (pendingOrders.Any() && !changedOffer)
+                {
+                    new ConfirmOrders(UserLogged).ShowDialog();
+                }
+                else
+                {
+                    changedOffer = false;
+                }
             }
 
         }
@@ -175,6 +204,24 @@ namespace Client
             return -1;
         }
 
+        void DeleteOrder(Order order)
+        {
+            int pos = GetOrderPos(order);
+            if(pos != -1)
+            {
+                
+                if (pendingView.InvokeRequired)
+                {
+                    pendingView.BeginInvoke((MethodInvoker)delegate () { pendingOrders.RemoveAt(pos); pendingView.Items[pos].Remove(); });
+                }
+                else
+                {
+                    pendingOrders.RemoveAt(pos);
+                    pendingView.Items[pos].Remove();
+                }
+            }
+        }
+
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             new Wallet(UserLogged).ShowDialog();
@@ -188,6 +235,30 @@ namespace Client
         private void button1_Click(object sender, System.EventArgs e)
         {
             new PurchaseOrder(UserLogged).ShowDialog();
+        }
+
+        private void cancelOrderButton_Click(object sender, System.EventArgs e)
+        {
+            if(pendingView.SelectedItems.Count > 0)
+            {
+                
+                int index = pendingView.Items.IndexOf(pendingView.SelectedItems[0]);
+                pendingView.Items.Remove(pendingView.SelectedItems[0]);
+                Order o = pendingOrders[index];
+                pendingOrders.RemoveAt(index);
+                r.cancelPendingOrder(o);
+            }
+        }
+
+        private void changeOfferButton_Click(object sender, System.EventArgs e)
+        {
+            if (pendingView.SelectedItems.Count > 0)
+            {
+                int index = pendingView.Items.IndexOf(pendingView.SelectedItems[0]);
+                Order o = pendingOrders[index];
+                changedOffer = true;
+                new ChangeOrder(o).ShowDialog();
+            }                
         }
     }
 }

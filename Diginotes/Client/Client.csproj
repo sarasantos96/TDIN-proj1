@@ -48,6 +48,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChangeOrder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChangeOrder.Designer.cs">
+      <DependentUpon>ChangeOrder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfirmOrders.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfirmOrders.Designer.cs">
+      <DependentUpon>ConfirmOrders.cs</DependentUpon>
+    </Compile>
     <Compile Include="Dashboard.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -86,6 +98,12 @@
     <Compile Include="Wallet.Designer.cs">
       <DependentUpon>Wallet.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="ChangeOrder.resx">
+      <DependentUpon>ChangeOrder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfirmOrders.resx">
+      <DependentUpon>ConfirmOrders.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Dashboard.resx">
       <DependentUpon>Dashboard.cs</DependentUpon>
     </EmbeddedResource>
