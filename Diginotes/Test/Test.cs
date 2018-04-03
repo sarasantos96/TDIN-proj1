@@ -44,27 +44,27 @@ namespace Test
             }*/
 
             Order order1 = new Order(OrderType.PURCHASE, user1, 20);
-            Order order2 = new Order(OrderType.PURCHASE, user1, 10);
-            Order order3 = new Order(OrderType.PURCHASE, user1, 10);
-            Order order4 = new Order(OrderType.PURCHASE, user1, 10);
-            Order order5 = new Order(OrderType.SELL, user2, 10);
+           // Order order2 = new Order(OrderType.PURCHASE, user1, 10);
+           // Order order3 = new Order(OrderType.PURCHASE, user1, 10);
+            //Order order4 = new Order(OrderType.PURCHASE, user1, 10);
+           // Order order5 = new Order(OrderType.SELL, user2, 10);
             Order order6 = new Order(OrderType.SELL, user2, 60);
             r.AddOrder(order1);
-           /* r.AddOrder(order2);
-            r.AddOrder(order3);
-            r.AddOrder(order4);*/
-            r.AddOrder(order2);
+            /* r.AddOrder(order2);
+             r.AddOrder(order3);
+             r.AddOrder(order4);*/
+            //r.AddOrder(order2);
 
-           /* Console.WriteLine("Orders:");
-            foreach (Order o in r.GetOrders())
-            {
-                Console.WriteLine("User " + o.Owner.Name + ", quantity=" + o.Quantity);
-            }
+            /* Console.WriteLine("Orders:");
+             foreach (Order o in r.GetOrders())
+             {
+                 Console.WriteLine("User " + o.Owner.Name + ", quantity=" + o.Quantity);
+             }*/
 
-            Console.ReadLine();
-
+            //Console.ReadLine();
+            System.Threading.Thread.Sleep(5000);
             r.AddOrder(order6);
-
+            /*
             foreach (Order o in r.GetOrders())
             {
                 Console.WriteLine("User " + o.Owner.Name + ", quantity=" + o.Quantity);

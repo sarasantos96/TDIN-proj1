@@ -106,7 +106,7 @@ namespace Common
         List<Order> GetUserPendingOrders(User user);
     }
 
-    public enum EventType { QuoteChanged, NewOrder, CompleteOrder, NewMessage};
+    public enum EventType { QuoteChanged, NewOrder, CompleteOrder, IncompleteOrder,NewMessage};
 
     [Serializable]
     public class EventItem

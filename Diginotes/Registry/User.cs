@@ -255,8 +255,7 @@ namespace Registry
             if (!orders.Any())
             {
                 orders.Add(order);
-                EventItem item = new EventItem(EventType.NewOrder, order);
-                NotifyClients(item);
+                NotifyNewOrder(order);
             }
             else
             {
@@ -269,15 +268,16 @@ namespace Registry
                         int aux = order.Quantity;
                         order.Quantity = order.Quantity - el.Quantity;
                         int temp = el.Quantity - aux;
-                        if(temp > 0)
-                        {
-                            EventItem item = new EventItem(EventType.CompleteOrder, el);
-                            NotifyClients(item);
-                            orders.RemoveAt(i);
+                        orders.RemoveAt(i);
+                        if (temp > 0)
+                        {                            
                             el.Quantity = temp;
                             orders.Add(el);
-                            item = new EventItem(EventType.NewOrder, el);
-                            NotifyClients(item);
+                            NotifyNewOrder(el);
+                        }
+                        else
+                        {
+                            NotifyCompleteOrder(el);
                         }
                         //TODO fazer a transação
                         break;
@@ -288,15 +288,18 @@ namespace Registry
                 if (!FoundTransaction)
                 {
                     orders.Add(order);
-                    EventItem item = new EventItem(EventType.NewOrder, order);
-                    NotifyClients(item);
+                    NotifyNewOrder(order);
                 }
                 else
                 {
-                    orders.RemoveAll(o => o.Quantity <= 0);
+                    //orders.RemoveAll(o => o.Quantity <= 0); NECESSÁRIO??
                     if (order.Quantity > 0)
                     {
                         AddOrder(order);
+                    }
+                    else
+                    {
+                        NotifyCompleteOrder(order);
                     }
                 }
             }
@@ -313,6 +316,24 @@ namespace Registry
             }
 
             return pending;
+        }
+
+        public void NotifyIncompleteOrder(Order order)
+        {
+            EventItem item = new EventItem(EventType.IncompleteOrder, order);
+            NotifyClients(item);
+        }
+
+        public void NotifyCompleteOrder(Order order)
+        {
+            EventItem item = new EventItem(EventType.CompleteOrder, order);
+            NotifyClients(item);
+        }
+
+        public void NotifyNewOrder(Order order)
+        {
+            EventItem item = new EventItem(EventType.NewOrder, order);
+            NotifyClients(item);
         }
     }
 }

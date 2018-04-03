@@ -9,6 +9,7 @@ namespace Client
         IRegistry r;
         User UserLogged;
         EventIntermediate intermediate;
+        List<Order> pendingOrders;
 
         public Dashboard(User user)
         {
@@ -24,7 +25,7 @@ namespace Client
             quoteLabelValue.Text = r.GetQuote().ToString();
 
             //Set inital pending orders
-            List<Order> pendingOrders = r.GetUserPendingOrders(UserLogged);
+            pendingOrders = r.GetUserPendingOrders(UserLogged);
             foreach (Order order in pendingOrders)
             {
                 ListViewItem item = new ListViewItem(order.Type.ToString());
@@ -51,7 +52,14 @@ namespace Client
                 case EventType.CompleteOrder:
                     if (item.Order.Owner.Username.Equals(UserLogged.Username))
                     {
-                        OnNewOrder(new Order(OrderType.SELL, UserLogged,-1));
+                        OnCompleteOrder(item.Order);
+                    }
+                    break;
+
+                case EventType.IncompleteOrder:
+                    if (item.Order.Owner.Username.Equals(UserLogged.Username))
+                    {
+
                     }
                     break;
 
@@ -84,27 +92,58 @@ namespace Client
 
             if (pendingView.InvokeRequired)
             {
-                pendingView.BeginInvoke((MethodInvoker)delegate () { pendingView.Items.Add(i); });
+                pendingView.BeginInvoke((MethodInvoker)delegate () { pendingView.Items.Add(i); pendingOrders.Add(order); });
             }
             else
             {
                 pendingView.Items.Add(i);
+                pendingOrders.Add(order);
             }
+        }
+
+        void OnCompleteOrder(Order order)
+        {
+            int pos = GetOrderPos(order);
+            if (pos != -1)
+            {
+                if (pendingView.InvokeRequired)
+                {
+                    pendingView.BeginInvoke((MethodInvoker)delegate () { pendingView.Items[pos].Remove(); pendingOrders.RemoveAt(pos); });
+                }
+                else
+                {
+                    pendingView.Items[pos].Remove();
+                    pendingOrders.RemoveAt(pos);
+                }
+            }                
+        }
+
+        public int GetOrderPos(Order order)
+        {
+            int i = 0;
+            foreach (Order o in pendingOrders)
+            {
+                if (o.Owner.Username.Equals(order.Owner.Username) && o.Quantity == order.Quantity && o.Type == order.Type)
+                    return i;
+                i++;
+            }
+
+            return -1;
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            new Wallet(UserLogged).Show();
+            new Wallet(UserLogged).ShowDialog();
         }
 
         private void button2_Click(object sender, System.EventArgs e)
         {
-            new SellOrder(UserLogged).Show();
+            new SellOrder(UserLogged).ShowDialog();
         }
 
         private void button1_Click(object sender, System.EventArgs e)
         {
-            new PurchaseOrder(UserLogged).Show();
+            new PurchaseOrder(UserLogged).ShowDialog();
         }
     }
 }
