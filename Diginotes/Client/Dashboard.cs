@@ -53,15 +53,15 @@ namespace Client
                     if (item.Order.Owner.Username.Equals(UserLogged.Username))
                     {
                         OnCompleteOrder(item.Order);
+                        WriteMessage("Transaction Completed: " + item.Order.Type.ToString() );
                     }
                     break;
 
                 case EventType.IncompleteOrder:
                     if (item.Order.Owner.Username.Equals(UserLogged.Username))
                     {
-                        //TODO: change to handle incomplete events
-                        OnCompleteOrder(item.Order);
-                        OnNewOrder(item.Order);
+                        OnIncompleteOrder(item.Order);
+                        WriteMessage("Partial Transaction: " + item.Order.Type.ToString() );
                     }
                     break;
 
@@ -118,6 +118,48 @@ namespace Client
                     pendingOrders.RemoveAt(pos);
                 }
             }                
+        }
+
+        //TODO: Change to handle incomplete orders
+        void OnIncompleteOrder(Order order)
+        {
+            int pos = GetOrderPos(order);
+            ListViewItem i = new ListViewItem(order.Type.ToString());
+            i.SubItems.Add(order.Quantity.ToString());
+
+            if (pos != -1)
+            {
+                if (pendingView.InvokeRequired)
+                {
+                    pendingView.BeginInvoke((MethodInvoker)delegate () {
+                        pendingView.Items[pos].Remove();
+                        pendingOrders.RemoveAt(pos);
+                        pendingView.Items.Add(i);
+                        pendingOrders.Add(order);
+                    });
+                }
+                else
+                {
+                    pendingView.Items[pos].Remove();
+                    pendingOrders.RemoveAt(pos);
+                    pendingView.Items.Add(i);
+                    pendingOrders.Add(order);
+                }
+            }
+        }
+
+        void WriteMessage(string message)
+        {
+            ListViewItem i = new ListViewItem(message);
+            
+            if (messageView.InvokeRequired)
+            {
+                messageView.BeginInvoke((MethodInvoker)delegate () { messageView.Items.Add(i); });
+            }
+            else
+            {
+                messageView.Items.Add(i);
+            }
         }
 
         public int GetOrderPos(Order order)

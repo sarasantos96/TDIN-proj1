@@ -37,9 +37,10 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.pendingView = new System.Windows.Forms.ListView();
-            this.listView2 = new System.Windows.Forms.ListView();
             this.Type = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Quantity = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.messageView = new System.Windows.Forms.ListView();
+            this.Messages = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // label1
@@ -131,14 +132,6 @@
             this.pendingView.UseCompatibleStateImageBehavior = false;
             this.pendingView.View = System.Windows.Forms.View.Details;
             // 
-            // listView2
-            // 
-            this.listView2.Location = new System.Drawing.Point(25, 188);
-            this.listView2.Name = "listView2";
-            this.listView2.Size = new System.Drawing.Size(366, 160);
-            this.listView2.TabIndex = 9;
-            this.listView2.UseCompatibleStateImageBehavior = false;
-            // 
             // Type
             // 
             this.Type.Text = "Type";
@@ -149,12 +142,29 @@
             this.Quantity.Text = "Quantity";
             this.Quantity.Width = 100;
             // 
+            // messageView
+            // 
+            this.messageView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.Messages});
+            this.messageView.GridLines = true;
+            this.messageView.Location = new System.Drawing.Point(25, 188);
+            this.messageView.Name = "messageView";
+            this.messageView.Size = new System.Drawing.Size(366, 160);
+            this.messageView.TabIndex = 9;
+            this.messageView.UseCompatibleStateImageBehavior = false;
+            this.messageView.View = System.Windows.Forms.View.SmallIcon;
+            // 
+            // Messages
+            // 
+            this.Messages.Text = "Messages";
+            this.Messages.Width = 334;
+            // 
             // Dashboard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 389);
-            this.Controls.Add(this.listView2);
+            this.Controls.Add(this.messageView);
             this.Controls.Add(this.pendingView);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
@@ -183,6 +193,7 @@
         private System.Windows.Forms.ListView pendingView;
         private System.Windows.Forms.ColumnHeader Type;
         private System.Windows.Forms.ColumnHeader Quantity;
-        private System.Windows.Forms.ListView listView2;
+        private System.Windows.Forms.ListView messageView;
+        private System.Windows.Forms.ColumnHeader Messages;
     }
 }

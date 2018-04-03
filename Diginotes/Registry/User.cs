@@ -250,6 +250,34 @@ namespace Registry
             return diginotes;
         }
 
+        public Boolean ChangeDiginoteOwner(Diginote diginote, int newId)
+        {
+            Boolean success = false;
+
+            try
+            {
+                //DATABASE
+                System.Data.SqlClient.SqlCommand cmd = new System.Data.SqlClient.SqlCommand();
+                cmd.CommandType = System.Data.CommandType.Text;
+                cmd.CommandText = "UPDATE Diginote SET Owner = "+ newId.ToString() +" WHERE SerialNumber = '"+ diginote.SerialNumber + "'; " ;
+                cmd.Connection = con;
+
+                con.Open();
+                cmd.ExecuteNonQuery();
+                con.Close();
+            }
+            catch (Exception e)
+            {
+                if (con.State == System.Data.ConnectionState.Open)
+                    con.Close();
+
+                Console.WriteLine("[ChangeDiginoteOwner] Exeception Caught: " + e.Message);
+            }
+
+
+            return success;
+        }
+
         public List<Order> GetOrders()
         {
             return orders;
@@ -272,6 +300,7 @@ namespace Registry
                     {
                         FoundTransaction = true;
                         int aux = order.Quantity;
+                        Boolean transaction = DoTransaction(order, el); //TODO: Do something if transaction fails
                         order.Quantity = order.Quantity - el.Quantity;
                         int temp = el.Quantity - aux;
                         orders.RemoveAt(i);
@@ -284,8 +313,7 @@ namespace Registry
                         else
                         {
                             NotifyCompleteOrder(el);
-                        }
-                        //TODO fazer a transação
+                        } 
                         break;
                     }
                     i++;
@@ -343,5 +371,38 @@ namespace Registry
             EventItem item = new EventItem(EventType.NewOrder, order);
             NotifyClients(item);
         }
+
+        public Boolean DoTransaction(Order order1, Order order2)
+        {
+            int newId = -1;
+            int quantity = -1;
+            List<Diginote> diginotes = new List<Diginote>();
+
+            if(order1.Type == OrderType.PURCHASE)
+            {
+                newId = GetUserId(order1.Owner);
+                quantity = order2.Quantity;
+                diginotes = GetUserDiginotes(order2.Owner);
+            }
+            else
+            {
+                newId = GetUserId(order2.Owner);
+                quantity = order1.Quantity;
+                diginotes = GetUserDiginotes(order1.Owner);
+            }
+
+            if (quantity > diginotes.Count)
+                return false;
+
+            Boolean success = false;
+            for(int i=0; i < quantity; i++)
+            {
+                success = ChangeDiginoteOwner(diginotes[i], newId);
+                if (!success)
+                    return false;
+            }
+
+            return success;
+        }      
     }
 }
