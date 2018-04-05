@@ -36,12 +36,13 @@
             this.typeLabel = new System.Windows.Forms.Label();
             this.qntlabel = new System.Windows.Forms.Label();
             this.newpriceupanddown = new System.Windows.Forms.NumericUpDown();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.newpriceupanddown)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(108, 213);
+            this.button1.Location = new System.Drawing.Point(116, 235);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(134, 51);
             this.button1.TabIndex = 0;
@@ -52,7 +53,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(82, 39);
+            this.label1.Location = new System.Drawing.Point(96, 55);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(48, 17);
             this.label1.TabIndex = 1;
@@ -61,7 +62,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(65, 89);
+            this.label2.Location = new System.Drawing.Point(79, 114);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(65, 17);
             this.label2.TabIndex = 2;
@@ -70,7 +71,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(51, 142);
+            this.label3.Location = new System.Drawing.Point(65, 184);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(79, 17);
             this.label3.TabIndex = 3;
@@ -79,7 +80,7 @@
             // typeLabel
             // 
             this.typeLabel.AutoSize = true;
-            this.typeLabel.Location = new System.Drawing.Point(165, 39);
+            this.typeLabel.Location = new System.Drawing.Point(195, 55);
             this.typeLabel.Name = "typeLabel";
             this.typeLabel.Size = new System.Drawing.Size(46, 17);
             this.typeLabel.TabIndex = 4;
@@ -88,7 +89,7 @@
             // qntlabel
             // 
             this.qntlabel.AutoSize = true;
-            this.qntlabel.Location = new System.Drawing.Point(165, 89);
+            this.qntlabel.Location = new System.Drawing.Point(195, 114);
             this.qntlabel.Name = "qntlabel";
             this.qntlabel.Size = new System.Drawing.Size(46, 17);
             this.qntlabel.TabIndex = 5;
@@ -96,16 +97,30 @@
             // 
             // newpriceupanddown
             // 
-            this.newpriceupanddown.Location = new System.Drawing.Point(168, 140);
+            this.newpriceupanddown.Location = new System.Drawing.Point(198, 179);
             this.newpriceupanddown.Name = "newpriceupanddown";
             this.newpriceupanddown.Size = new System.Drawing.Size(88, 22);
             this.newpriceupanddown.TabIndex = 6;
+            // 
+            // textBox1
+            // 
+            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox1.Location = new System.Drawing.Point(31, 9);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
+            this.textBox1.Size = new System.Drawing.Size(308, 43);
+            this.textBox1.TabIndex = 7;
+            this.textBox1.Text = "A partial transaction was completed, please indicate a new price:";
+            this.textBox1.Visible = false;
             // 
             // ChangeOrder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(343, 299);
+            this.ClientSize = new System.Drawing.Size(361, 307);
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.newpriceupanddown);
             this.Controls.Add(this.qntlabel);
             this.Controls.Add(this.typeLabel);
@@ -131,5 +146,6 @@
         private System.Windows.Forms.Label typeLabel;
         private System.Windows.Forms.Label qntlabel;
         private System.Windows.Forms.NumericUpDown newpriceupanddown;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }

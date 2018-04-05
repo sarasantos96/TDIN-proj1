@@ -299,12 +299,14 @@ namespace Registry
                     int temp = el.Quantity - aux;
                     orders.RemoveAt(i);
                     if (temp > 0)
-                    {                            
+                    {
+                        Order old = new Order(el.Type,el.Owner,el.Quantity);
+                        old.Timestamp = el.Timestamp;
                         el.Quantity = temp;
                         el.Timestamp = DateTime.Now;
                         orders.Add(el);
                         //TODO: Update quantity in database
-                        NotifyIncompleteOrder(el);
+                        NotifyIncompleteOrder(el,old);
                     }
                     else
                     {
@@ -350,9 +352,9 @@ namespace Registry
             return pending;
         }
 
-        public void NotifyIncompleteOrder(Order order)
+        public void NotifyIncompleteOrder(Order order, Order newOrder)
         {
-            EventItem item = new EventItem(EventType.IncompleteOrder, order);
+            EventItem item = new EventItem(EventType.IncompleteOrder, order, newOrder);
             NotifyClients(item);
         }
 
@@ -371,19 +373,17 @@ namespace Registry
         public Boolean DoTransaction(Order order1, Order order2)
         {
             int newId = -1;
-            int quantity = -1;
+            int quantity = Math.Min(order1.Quantity, order2.Quantity);
             List<Diginote> diginotes = new List<Diginote>();
 
             if(order1.Type == OrderType.PURCHASE)
             {
                 newId = GetUserId(order1.Owner);
-                quantity = order2.Quantity;
                 diginotes = GetUserDiginotes(order2.Owner);
             }
             else
             {
                 newId = GetUserId(order2.Owner);
-                quantity = order1.Quantity;
                 diginotes = GetUserDiginotes(order1.Owner);
             }
 

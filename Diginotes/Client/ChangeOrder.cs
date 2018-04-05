@@ -17,7 +17,7 @@ namespace Client
         float quote;
         IRegistry r;
 
-        public ChangeOrder(Order order)
+        public ChangeOrder(Order order, Boolean message)
         {
             InitializeComponent();
 
@@ -27,16 +27,33 @@ namespace Client
 
             typeLabel.Text = order.Type.ToString();
             qntlabel.Text = order.Quantity.ToString();
-            newpriceupanddown.Minimum = 0;
-            newpriceupanddown.Maximum = decimal.MaxValue;
+            if(order.Type == OrderType.PURCHASE)
+            {
+                newpriceupanddown.Minimum = (decimal)(order.Quantity * quote);
+                newpriceupanddown.Maximum = decimal.MaxValue;
+            }
+            else
+            {
+                newpriceupanddown.Minimum = 1;
+                newpriceupanddown.Maximum = (decimal)(order.Quantity * quote);
+            }
+           
             newpriceupanddown.Value = (decimal) (order.Quantity * quote);
+
+            if (message)
+            {
+
+                textBox1.Visible = true;
+            }
+            
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             float newPrice = (int) newpriceupanddown.Value;
             float newquote = (newPrice * quote) / (this.Order.Quantity * quote);
-            r.SetQuote(newquote);
+            if(newquote != quote)
+                r.SetQuote(newquote);
             this.Close();
         }
     }

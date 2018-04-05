@@ -64,7 +64,7 @@ namespace Client
                 case EventType.IncompleteOrder:
                     if (item.Order.Owner.Username.Equals(UserLogged.Username))
                     {
-                        OnIncompleteOrder(item.Order);
+                        OnIncompleteOrder(item.Order, item.OldOrder);
                         WriteMessage("Partial Transaction: " + item.Order.Type.ToString() );
                     }
                     break;
@@ -149,10 +149,9 @@ namespace Client
             }                
         }
 
-        //TODO: Change to handle incomplete orders
-        void OnIncompleteOrder(Order order)
+        void OnIncompleteOrder(Order order, Order oldOrder)
         {
-            int pos = GetOrderPos(order);
+            int pos = GetOrderPos(oldOrder);
             ListViewItem i = new ListViewItem(order.Type.ToString());
             i.SubItems.Add(order.Quantity.ToString());
 
@@ -165,6 +164,9 @@ namespace Client
                         pendingOrders.RemoveAt(pos);
                         pendingView.Items.Add(i);
                         pendingOrders.Add(order);
+                        ChangeOrder frm = new ChangeOrder(order,true);
+                        frm.StartPosition = FormStartPosition.CenterParent;
+                        frm.ShowDialog();
                     });
                 }
                 else
@@ -173,6 +175,9 @@ namespace Client
                     pendingOrders.RemoveAt(pos);
                     pendingView.Items.Add(i);
                     pendingOrders.Add(order);
+                    ChangeOrder frm = new ChangeOrder(order,true);
+                    frm.StartPosition = FormStartPosition.CenterParent;
+                    frm.ShowDialog();
                 }
             }
         }
@@ -196,7 +201,8 @@ namespace Client
             int i = 0;
             foreach (Order o in pendingOrders)
             {
-                if (o.Owner.Username.Equals(order.Owner.Username) && o.Timestamp == order.Timestamp && o.Type == order.Type)
+                int compareDates = DateTime.Compare(o.Timestamp, order.Timestamp);
+                if (o.Owner.Username.Equals(order.Owner.Username) && compareDates == 0  && o.Type == order.Type)
                     return i;
                 i++;
             }
@@ -224,17 +230,26 @@ namespace Client
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            new Wallet(UserLogged).ShowDialog();
+            Wallet frm = new Wallet(UserLogged);
+            frm.StartPosition = FormStartPosition.CenterParent;
+            frm.ShowDialog();
         }
 
         private void button2_Click(object sender, System.EventArgs e)
         {
-            new SellOrder(UserLogged).ShowDialog();
+            if (r.GetUserDiginotes(UserLogged).Any())
+            {
+                SellOrder frm = new SellOrder(UserLogged);
+                frm.StartPosition = FormStartPosition.CenterParent;
+                frm.ShowDialog();
+            }            
         }
 
         private void button1_Click(object sender, System.EventArgs e)
         {
-            new PurchaseOrder(UserLogged).ShowDialog();
+            PurchaseOrder frm = new PurchaseOrder(UserLogged);
+            frm.StartPosition = FormStartPosition.CenterParent;
+            frm.ShowDialog();
         }
 
         private void cancelOrderButton_Click(object sender, System.EventArgs e)
@@ -257,7 +272,9 @@ namespace Client
                 int index = pendingView.Items.IndexOf(pendingView.SelectedItems[0]);
                 Order o = pendingOrders[index];
                 changedOffer = true;
-                new ChangeOrder(o).ShowDialog();
+                ChangeOrder frm = new ChangeOrder(o,false);
+                frm.StartPosition = FormStartPosition.CenterParent;
+                frm.ShowDialog();
             }                
         }
     }

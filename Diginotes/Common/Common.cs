@@ -121,6 +121,7 @@ namespace Common
         public EventType Type { get; set; }
         public float Quote { get; set; }
         public Order Order { get; set; }
+        public Order OldOrder { get; set; }
 
         public EventItem(EventType type, float quote)
         {
@@ -133,6 +134,13 @@ namespace Common
             Type = type;
             Quote = -1;
             Order = order;
+        }
+
+        public EventItem(EventType type, Order order, Order oldOrder)
+        {
+            Type = type;
+            Order = order;
+            OldOrder = oldOrder; 
         }
     }
 
