@@ -23,7 +23,7 @@ namespace Client
         {
             InitializeComponent();
             aTimer = new System.Timers.Timer();
-            aTimer.Interval = 60000;
+            aTimer.Interval = 15000;
             aTimer.Elapsed += OnTimedEvent;
             aTimer.AutoReset = false;
 
@@ -39,6 +39,8 @@ namespace Client
                 item.SubItems.Add((order.Quantity * quote).ToString());
                 confirmView.Items.Add(item);
             }
+
+            r.ChangeAvailabilityOrders(user, false);
 
             //Start Timer
             aTimer.Enabled = true;
@@ -65,10 +67,11 @@ namespace Client
         {
             if (this.InvokeRequired)
             {
-                this.BeginInvoke((MethodInvoker)delegate () { this.Close(); });
+                this.BeginInvoke((MethodInvoker)delegate () { this.Close(); r.ChangeAvailabilityOrders(user, false); });
             }
             else
             {
+                r.ChangeAvailabilityOrders(user, false);
                 this.Close();
             }
         }

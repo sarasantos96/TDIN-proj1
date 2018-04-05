@@ -1,0 +1,15 @@
+C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Server\bin\Release\Database1.mdf
+C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Server\bin\Release\Database1_log.ldf
+C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Server\bin\Release\Server.exe.config
+C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Server\bin\Release\Server.exe
+C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Server\bin\Release\Server.pdb
+C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Server\bin\Release\Common.dll
+C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Server\bin\Release\Registry.dll
+C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Server\bin\Release\Common.pdb
+C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Server\bin\Release\Registry.pdb
+C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Server\bin\Release\Registry.dll.config
+C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Server\obj\Release\Server.csprojResolveAssemblyReference.cache
+C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Server\obj\Release\Server.csproj.CoreCompileInputs.cache
+C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Server\obj\Release\Server.csproj.CopyComplete
+C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Server\obj\Release\Server.exe
+C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Server\obj\Release\Server.pdb

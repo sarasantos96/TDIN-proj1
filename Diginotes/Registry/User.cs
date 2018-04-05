@@ -265,6 +265,7 @@ namespace Registry
                 con.Open();
                 cmd.ExecuteNonQuery();
                 con.Close();
+                success = true; 
             }
             catch (Exception e)
             {
@@ -286,57 +287,52 @@ namespace Registry
         public void AddOrder(Order order)
         {
             Boolean FoundTransaction = false;
-            if (!orders.Any())
+            int i = 0;
+            foreach(Order el in orders)
+            {
+                if(el.Type != order.Type && !el.Owner.Username.Equals(order.Owner.Username) && el.Available)
+                {
+                    FoundTransaction = true;
+                    int aux = order.Quantity;
+                    Boolean transaction = DoTransaction(order, el); 
+                    order.Quantity = order.Quantity - el.Quantity;
+                    int temp = el.Quantity - aux;
+                    orders.RemoveAt(i);
+                    if (temp > 0)
+                    {                            
+                        el.Quantity = temp;
+                        el.Timestamp = DateTime.Now;
+                        orders.Add(el);
+                        //TODO: Update quantity in database
+                        NotifyIncompleteOrder(el);
+                    }
+                    else
+                    {
+                        NotifyCompleteOrder(el);
+                        //TODO: Remove from database
+                    } 
+                    break;
+                }
+                i++;
+                if (order.Quantity <= 0)
+                    break;
+            }
+
+            if (!FoundTransaction)
             {
                 orders.Add(order);
+                //TODO: call add order to database
                 NotifyNewOrder(order);
             }
             else
             {
-                int i = 0;
-                foreach(Order el in orders)
+                if (order.Quantity > 0)
                 {
-                    if(el.Type != order.Type && !el.Owner.Username.Equals(order.Owner.Username))
-                    {
-                        FoundTransaction = true;
-                        int aux = order.Quantity;
-                        Boolean transaction = DoTransaction(order, el); //TODO: Do something if transaction fails
-                        order.Quantity = order.Quantity - el.Quantity;
-                        int temp = el.Quantity - aux;
-                        orders.RemoveAt(i);
-                        if (temp > 0)
-                        {                            
-                            el.Quantity = temp;
-                            orders.Add(el);
-                            NotifyIncompleteOrder(el);
-                        }
-                        else
-                        {
-                            NotifyCompleteOrder(el);
-                        } 
-                        break;
-                    }
-                    i++;
-                    if (order.Quantity <= 0)
-                        break;
-                }
-
-                if (!FoundTransaction)
-                {
-                    orders.Add(order);
-                    NotifyNewOrder(order);
+                    AddOrder(order);
                 }
                 else
                 {
-                    //orders.RemoveAll(o => o.Quantity <= 0); NECESSÁRIO??
-                    if (order.Quantity > 0)
-                    {
-                        AddOrder(order);
-                    }
-                    else
-                    {
-                        NotifyCompleteOrder(order);
-                    }
+                    NotifyCompleteOrder(order);
                 }
             }
         }
@@ -398,8 +394,6 @@ namespace Registry
             for(int i=0; i < quantity; i++)
             {
                 success = ChangeDiginoteOwner(diginotes[i], newId);
-                if (!success)
-                    return false;
             }
 
             return success;
@@ -420,6 +414,15 @@ namespace Registry
         {
             EventItem item = new EventItem(EventType.DeleteOrder, order);
             NotifyClients(item);
+        }
+
+        public void ChangeAvailabilityOrders(User user, Boolean availability)
+        {
+            foreach (Order o in orders)
+            {
+                if (o.Owner.Username.Equals(user.Username))
+                    o.Available = availability;
+            }
         }
     }
 }

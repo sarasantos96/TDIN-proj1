@@ -1,0 +1,12 @@
+C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Registry\bin\Release\Database1.mdf
+C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Registry\bin\Release\Database1_log.ldf
+C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Registry\bin\Release\Registry.dll.config
+C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Registry\bin\Release\Registry.dll
+C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Registry\bin\Release\Registry.pdb
+C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Registry\bin\Release\Common.dll
+C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Registry\bin\Release\Common.pdb
+C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Registry\obj\Release\User.csprojResolveAssemblyReference.cache
+C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Registry\obj\Release\User.csproj.CoreCompileInputs.cache
+C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Registry\obj\Release\User.csproj.CopyComplete
+C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Registry\obj\Release\Registry.dll
+C:\Users\santo\OneDrive\Documentos\FEUP\TDIN\TDIN-proj1\Diginotes\Registry\obj\Release\Registry.pdb

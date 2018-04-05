@@ -62,6 +62,7 @@ namespace Common
         public User Owner;
         public int Quantity;
         public DateTime Timestamp;
+        public Boolean Available;
 
         public Order(OrderType type, User user, int quantity)
         {
@@ -69,6 +70,7 @@ namespace Common
             Owner = user;
             Quantity = quantity;
             Timestamp = DateTime.Now;
+            Available = true;
         }
     }
 
@@ -108,6 +110,7 @@ namespace Common
         List<Order> GetUserPendingOrders(User user);
         void cancelPendingOrder(Order order);
         void NotifyDeleteOrder(Order order);
+        void ChangeAvailabilityOrders(User user, Boolean availability);
     }
 
     public enum EventType { QuoteChanged, NewOrder, CompleteOrder, IncompleteOrder,NewMessage, DeleteOrder};
