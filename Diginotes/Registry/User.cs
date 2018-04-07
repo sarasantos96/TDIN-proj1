@@ -29,8 +29,67 @@ namespace Registry
         {
             Console.WriteLine("Registry constructor evoked");
             con = new System.Data.SqlClient.SqlConnection(Properties.Settings.Default.Database1);
-            quote = 1;
+            Console.WriteLine(System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
+            LoadQuote();
             LoadOrders();
+        }
+
+        public void LoadQuote()
+        {
+            /*string path = System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\log.txt";
+
+            if (!File.Exists(path))
+            {
+                File.Create(path);
+                TextWriter tw = new StreamWriter(path);
+                tw.WriteLine("1");
+                quote = 1;
+                tw.Close();
+            }
+            else if (File.Exists(path))
+            {
+                using (StreamReader sr = File.OpenText(path))
+                {
+                    quote = Int32.Parse(sr.ReadLine());
+                    sr.Close();
+                }
+            }
+
+            Console.WriteLine("Quote= " + quote);*/
+
+            Console.WriteLine("loadQuote() invoked");
+            try
+            {
+                //DATABASE
+                System.Data.SqlClient.SqlCommand cmd = new System.Data.SqlClient.SqlCommand();
+                cmd.CommandType = System.Data.CommandType.Text;
+                cmd.CommandText = "SELECT Value FROM [Quote] WHERE Id=1";
+                cmd.Connection = con;
+
+                con.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                if (!reader.HasRows)
+                {
+                    con.Close();
+                }
+                else
+                {
+                    reader.Read();
+                    quote = reader.GetFloat(0);
+                }
+
+                reader.Close();
+                con.Close();
+            }
+            catch (Exception e)
+            {
+                if (con.State == System.Data.ConnectionState.Open)
+                    con.Close();
+
+                Console.WriteLine("[loadQuote] Exeception Caught: " + e.Message);
+                return;
+            }
         }
 
         public void LoadOrders()
@@ -198,6 +257,27 @@ namespace Registry
         public void SetQuote(float quote)
         {
             this.quote = quote;
+
+            try
+            {
+                //DATABASE
+                System.Data.SqlClient.SqlCommand cmd = new System.Data.SqlClient.SqlCommand();
+                cmd.CommandType = System.Data.CommandType.Text;
+                cmd.CommandText = "UPDATE [Quote] SET Value=" + quote + " WHERE Id=1";
+                cmd.Connection = con;
+
+                con.Open();
+                cmd.ExecuteNonQuery();
+                con.Close();
+            }
+            catch (Exception e)
+            {
+                if (con.State == System.Data.ConnectionState.Open)
+                    con.Close();
+
+                Console.WriteLine("[GetUserId] Exeception Caught: " + e.Message);
+            }
+
             EventItem item = new EventItem(EventType.QuoteChanged, quote);
             NotifyClients(item);
         }
@@ -362,7 +442,7 @@ namespace Registry
                         Order old = new Order(el.Type,el.Owner,el.Quantity);
                         old.Timestamp = el.Timestamp;
                         el.Quantity = temp;
-                        NotifyIncompleteOrder(el);
+                        NotifyIncompleteOrder(el, old);
                         UpdateOrderInDatabase(el);
                         el.Timestamp = DateTime.Now;
                         orders.Add(el);
