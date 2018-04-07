@@ -36,27 +36,6 @@ namespace Registry
 
         public void LoadQuote()
         {
-            /*string path = System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\log.txt";
-
-            if (!File.Exists(path))
-            {
-                File.Create(path);
-                TextWriter tw = new StreamWriter(path);
-                tw.WriteLine("1");
-                quote = 1;
-                tw.Close();
-            }
-            else if (File.Exists(path))
-            {
-                using (StreamReader sr = File.OpenText(path))
-                {
-                    quote = Int32.Parse(sr.ReadLine());
-                    sr.Close();
-                }
-            }
-
-            Console.WriteLine("Quote= " + quote);*/
-
             Console.WriteLine("loadQuote() invoked");
             try
             {
@@ -119,7 +98,7 @@ namespace Registry
                         User u = new User(reader.GetString(1), null, null);
                         OrderType type;
 
-                        if(reader.GetString(2) == "SELL")
+                        if (reader.GetString(2) == "SELL")
                         {
                             type = OrderType.SELL;
                         }
@@ -127,14 +106,14 @@ namespace Registry
                         {
                             type = OrderType.PURCHASE;
                         }
-                       
+
                         Order o = new Order(type, u, reader.GetInt32(3), reader.GetDateTime(4));
 
                         orders.Add(o);
                         NotifyNewOrder(o);
                     }
                 }
-                
+
                 reader.Close();
                 con.Close();
             }
@@ -166,7 +145,8 @@ namespace Registry
                 con.Open();
                 cmd.ExecuteNonQuery();
                 con.Close();
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 if (con.State == System.Data.ConnectionState.Open)
                     con.Close();
@@ -196,15 +176,15 @@ namespace Registry
                 if (!reader.HasRows)
                 {
                     con.Close();
-                    return null;  
+                    return null;
                 }
 
                 reader.Read();
                 log = new User(reader.GetString(0), reader.GetString(1), reader.GetString(2));
                 reader.Close();
-                con.Close();               
+                con.Close();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 if (con.State == System.Data.ConnectionState.Open)
                     con.Close();
@@ -284,11 +264,11 @@ namespace Registry
 
         void NotifyClients(EventItem item)
         {
-            if(ChangedEvent != null)
+            if (ChangedEvent != null)
             {
                 Delegate[] delagates = ChangedEvent.GetInvocationList();
 
-                foreach(ChangeEventHandler del in delagates)
+                foreach (ChangeEventHandler del in delagates)
                 {
                     new Thread(() => {
                         try
@@ -321,7 +301,7 @@ namespace Registry
                 cmd.Connection = con;
 
                 userId = GetUserId(owner);
-                if(userId == -1)
+                if (userId == -1)
                 {
                     Console.WriteLine("[CreateDiginote] User does not exist");
                     return;
@@ -332,14 +312,15 @@ namespace Registry
                 cmd.CommandText = "INSERT [Diginote] (SerialNumber, FacialValue, Owner) VALUES ('" + diginote.SerialNumber + "', '" + diginote.FacialValue + "', '" + userId + "');";
                 cmd.ExecuteNonQuery();
                 con.Close();
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 if (con.State == System.Data.ConnectionState.Open)
                     con.Close();
 
                 Console.WriteLine("[CreateDiginote] Exeception Caught: " + e.Message);
             }
-            
+
         }
 
         public List<Diginote> GetUserDiginotes(User user)
@@ -348,7 +329,7 @@ namespace Registry
             int userId = GetUserId(user);
             Diginote diginote;
 
-            if(userId == -1)
+            if (userId == -1)
             {
                 Console.WriteLine("[GetUserDiginotes] User does not exist");
                 return diginotes;
@@ -375,7 +356,7 @@ namespace Registry
                 }
                 con.Close();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 if (con.State == System.Data.ConnectionState.Open)
                     con.Close();
@@ -397,13 +378,13 @@ namespace Registry
                 //DATABASE
                 System.Data.SqlClient.SqlCommand cmd = new System.Data.SqlClient.SqlCommand();
                 cmd.CommandType = System.Data.CommandType.Text;
-                cmd.CommandText = "UPDATE Diginote SET Owner = "+ newId.ToString() +" WHERE SerialNumber = '"+ diginote.SerialNumber + "'; " ;
+                cmd.CommandText = "UPDATE Diginote SET Owner = " + newId.ToString() + " WHERE SerialNumber = '" + diginote.SerialNumber + "'; ";
                 cmd.Connection = con;
 
                 con.Open();
                 cmd.ExecuteNonQuery();
                 con.Close();
-                success = true; 
+                success = true;
             }
             catch (Exception e)
             {
@@ -426,20 +407,20 @@ namespace Registry
         {
             Boolean FoundTransaction = false;
             int i = 0;
-            foreach(Order el in orders)
+            foreach (Order el in orders)
             {
-                if(el.Type != order.Type && !el.Owner.Username.Equals(order.Owner.Username) && el.Available)
+                if (el.Type != order.Type && !el.Owner.Username.Equals(order.Owner.Username) && el.Available)
                 {
                     FoundTransaction = true;
                     int aux = order.Quantity;
-                    Boolean transaction = DoTransaction(order, el); 
+                    Boolean transaction = DoTransaction(order, el);
                     order.Quantity = order.Quantity - el.Quantity;
                     int temp = el.Quantity - aux;
                     el.Timestamp = orders.ElementAt(i).Timestamp;
                     orders.RemoveAt(i);
                     if (temp > 0)
                     {
-                        Order old = new Order(el.Type,el.Owner,el.Quantity);
+                        Order old = new Order(el.Type, el.Owner, el.Quantity);
                         old.Timestamp = el.Timestamp;
                         el.Quantity = temp;
                         NotifyIncompleteOrder(el, old);
@@ -451,7 +432,7 @@ namespace Registry
                     {
                         NotifyCompleteOrder(el);
                         RemoveOrderFromDatabase(el);
-                    } 
+                    }
                     break;
                 }
                 i++;
@@ -489,7 +470,7 @@ namespace Registry
 
                 string type;
 
-                if(order.Type == OrderType.PURCHASE)
+                if (order.Type == OrderType.PURCHASE)
                 {
                     type = "PURCHASE";
                 }
@@ -587,7 +568,7 @@ namespace Registry
         {
             List<Order> pending = new List<Order>();
 
-            foreach(Order order in this.orders)
+            foreach (Order order in this.orders)
             {
                 if (order.Owner.Username.Equals(user.Username))
                     pending.Add(order);
@@ -619,34 +600,72 @@ namespace Registry
             int newId = -1;
             int quantity = Math.Min(order1.Quantity, order2.Quantity);
             List<Diginote> diginotes = new List<Diginote>();
+            string from, to, date;
 
-            if(order1.Type == OrderType.PURCHASE)
+            if (order1.Timestamp > order2.Timestamp)
+                date = order1.Timestamp.ToString();
+            else
+                date = order2.Timestamp.ToString();
+
+            if (order1.Type == OrderType.PURCHASE)
             {
                 newId = GetUserId(order1.Owner);
                 diginotes = GetUserDiginotes(order2.Owner);
+                to = order1.Owner.Username;
+                from = order2.Owner.Username;
             }
             else
             {
                 newId = GetUserId(order2.Owner);
                 diginotes = GetUserDiginotes(order1.Owner);
+                from = order1.Owner.Username;
+                to = order2.Owner.Username;
             }
 
             if (quantity > diginotes.Count)
                 return false;
 
             Boolean success = false;
-            for(int i=0; i < quantity; i++)
+            for (int i = 0; i < quantity; i++)
             {
                 success = ChangeDiginoteOwner(diginotes[i], newId);
             }
 
+            string log = "Transaction: FROM " + from + " TO " + to + " QUANTITY " + quantity + " AT " + date;
+
+            string path = System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\log.txt";
+
+            if (!File.Exists(path))
+                File.Create(path);
+
+            using (StreamWriter w = File.AppendText(path))
+            {
+                w.WriteLine(log);
+                w.Close();
+            }
+            //AddTransactionLog(log);
+
             return success;
         }
-        
+
+        public void AddTransactionLog(string log)
+        {
+            string path = System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\log.txt";
+
+            if (!File.Exists(path))
+                File.Create(path);
+
+            using (StreamWriter w = File.AppendText(path))
+            {
+                w.WriteLine(log);
+                w.Close();
+            }
+        }
+
         public void cancelPendingOrder(Order order)
         {
             int i = 0;
-            foreach(Order o in new List<Order>(orders))
+            foreach (Order o in new List<Order>(orders))
             {
                 if (o.Owner.Username.Equals(order.Owner.Username) && o.Timestamp == order.Timestamp)
                     orders.RemoveAt(i);
