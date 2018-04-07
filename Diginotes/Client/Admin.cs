@@ -31,6 +31,7 @@ namespace Client
             {
                 ListViewItem item = new ListViewItem(order.Type.ToString());
                 item.SubItems.Add(order.Quantity.ToString());
+                item.SubItems.Add(order.Owner.Username);
                 listView1.Items.Add(item);
             }
 
@@ -98,6 +99,7 @@ namespace Client
         {
             ListViewItem i = new ListViewItem(order.Type.ToString());
             i.SubItems.Add(order.Quantity.ToString());
+            i.SubItems.Add(order.Owner.Username);
 
             if (listView1.InvokeRequired)
             {
@@ -132,6 +134,7 @@ namespace Client
             int pos = GetOrderPos(oldOrder);
             ListViewItem i = new ListViewItem(order.Type.ToString());
             i.SubItems.Add(order.Quantity.ToString());
+            i.SubItems.Add(order.Owner.Username);
 
             if (pos != -1)
             {

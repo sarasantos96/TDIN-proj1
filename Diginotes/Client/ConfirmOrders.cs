@@ -23,7 +23,7 @@ namespace Client
         {
             InitializeComponent();
             aTimer = new System.Timers.Timer();
-            aTimer.Interval = 15000;
+            aTimer.Interval = 60000;
             aTimer.Elapsed += OnTimedEvent;
             aTimer.AutoReset = false;
 
