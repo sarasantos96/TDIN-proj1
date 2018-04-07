@@ -72,6 +72,15 @@ namespace Common
             Timestamp = DateTime.Now;
             Available = true;
         }
+
+        public Order(OrderType type, User user, int quantity, DateTime timeStamp)
+        {
+            Type = type;
+            Owner = user;
+            Quantity = quantity;
+            Timestamp = timeStamp;
+            Available = true;
+        }
     }
 
     public class RemoteNew

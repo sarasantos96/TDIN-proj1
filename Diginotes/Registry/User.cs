@@ -30,7 +30,65 @@ namespace Registry
             Console.WriteLine("Registry constructor evoked");
             con = new System.Data.SqlClient.SqlConnection(Properties.Settings.Default.Database1);
             quote = 1;
-            orders = new List<Order>();
+            LoadOrders();
+        }
+
+        public void LoadOrders()
+        {
+            Console.WriteLine("loadOrders() invoked");
+            try
+            {
+                //DATABASE
+                System.Data.SqlClient.SqlCommand cmd = new System.Data.SqlClient.SqlCommand();
+                cmd.CommandType = System.Data.CommandType.Text;
+                cmd.CommandText = "SELECT * FROM [Order] ORDER BY TimeStamp ASC";
+                cmd.Connection = con;
+
+                con.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                orders = new List<Order>();
+
+                if (!reader.HasRows)
+                {
+                    con.Close();
+                }
+                else
+                {
+                    while (reader.Read())
+                    {
+                        User u = new User(reader.GetString(1), null, null);
+                        OrderType type;
+
+                        if(reader.GetString(2) == "SELL")
+                        {
+                            type = OrderType.SELL;
+                        }
+                        else
+                        {
+                            type = OrderType.PURCHASE;
+                        }
+                       
+                        Order o = new Order(type, u, reader.GetInt32(3), reader.GetDateTime(4));
+
+                        orders.Add(o);
+                        NotifyNewOrder(o);
+                    }
+                }
+                
+                reader.Close();
+                con.Close();
+            }
+            catch (Exception e)
+            {
+                if (con.State == System.Data.ConnectionState.Open)
+                    con.Close();
+
+                Console.WriteLine("[loadOrders] Exeception Caught: " + e.Message);
+                return;
+            }
+
+
         }
 
         public Boolean AddUser(User user)
@@ -297,21 +355,22 @@ namespace Registry
                     Boolean transaction = DoTransaction(order, el); 
                     order.Quantity = order.Quantity - el.Quantity;
                     int temp = el.Quantity - aux;
+                    el.Timestamp = orders.ElementAt(i).Timestamp;
                     orders.RemoveAt(i);
                     if (temp > 0)
                     {
                         Order old = new Order(el.Type,el.Owner,el.Quantity);
                         old.Timestamp = el.Timestamp;
                         el.Quantity = temp;
+                        NotifyIncompleteOrder(el);
+                        UpdateOrderInDatabase(el);
                         el.Timestamp = DateTime.Now;
                         orders.Add(el);
-                        //TODO: Update quantity in database
-                        NotifyIncompleteOrder(el,old);
                     }
                     else
                     {
                         NotifyCompleteOrder(el);
-                        //TODO: Remove from database
+                        RemoveOrderFromDatabase(el);
                     } 
                     break;
                 }
@@ -323,7 +382,7 @@ namespace Registry
             if (!FoundTransaction)
             {
                 orders.Add(order);
-                //TODO: call add order to database
+                AddOrderToDatabase(order);
                 NotifyNewOrder(order);
             }
             else
@@ -336,6 +395,111 @@ namespace Registry
                 {
                     NotifyCompleteOrder(order);
                 }
+            }
+        }
+
+        public void AddOrderToDatabase(Order order)
+        {
+            try
+            {
+                //DATABASE
+                System.Data.SqlClient.SqlCommand cmd = new System.Data.SqlClient.SqlCommand();
+                cmd.CommandType = System.Data.CommandType.Text;
+                cmd.Connection = con;
+
+                string type;
+
+                if(order.Type == OrderType.PURCHASE)
+                {
+                    type = "PURCHASE";
+                }
+                else
+                {
+                    type = "SELL";
+                }
+
+                int available = 1;
+                if (!order.Available)
+                    available = 0;
+
+                con.Open();
+                cmd.CommandText = "INSERT [Order] (Owner, Type, Quantity, TimeStamp, Available) VALUES ('" + order.Owner.Username + "', '" + type + "', " + order.Quantity + ", '" + order.Timestamp.ToString() + "', " + available + ");";
+                cmd.ExecuteNonQuery();
+                con.Close();
+            }
+            catch (Exception e)
+            {
+                if (con.State == System.Data.ConnectionState.Open)
+                    con.Close();
+
+                Console.WriteLine("[AddOrderToDatabase] Exeception Caught: " + e.Message);
+            }
+        }
+
+        public void UpdateOrderInDatabase(Order order)
+        {
+            try
+            {
+                //DATABASE
+                System.Data.SqlClient.SqlCommand cmd = new System.Data.SqlClient.SqlCommand();
+                cmd.CommandType = System.Data.CommandType.Text;
+                cmd.Connection = con;
+
+                string type;
+                if (order.Type == OrderType.PURCHASE)
+                {
+                    type = "PURCHASE";
+                }
+                else
+                {
+                    type = "SELL";
+                }
+
+                con.Open();
+                cmd.CommandText = "UPDATE [Order] SET Quantity= " + order.Quantity + ", TimeStamp='" + DateTime.Now + "' WHERE Owner='" + order.Owner.Username + "' AND Type='" + type + "' AND TimeStamp='" + order.Timestamp.ToString() + "';";
+                cmd.ExecuteNonQuery();
+                con.Close();
+            }
+            catch (Exception e)
+            {
+                if (con.State == System.Data.ConnectionState.Open)
+                    con.Close();
+
+                Console.WriteLine("[UpdateOrderInDatabase] Exeception Caught: " + e.Message);
+            }
+        }
+
+        public void RemoveOrderFromDatabase(Order order)
+        {
+            try
+            {
+                //DATABASE
+                System.Data.SqlClient.SqlCommand cmd = new System.Data.SqlClient.SqlCommand();
+                cmd.CommandType = System.Data.CommandType.Text;
+                cmd.Connection = con;
+
+                string type;
+                if (order.Type == OrderType.PURCHASE)
+                {
+                    type = "PURCHASE";
+                }
+                else
+                {
+                    type = "SELL";
+                }
+
+                con.Open();
+                cmd.CommandText = "DELETE FROM [Order] WHERE Owner='" + order.Owner.Username + "' AND TimeStamp='" + order.Timestamp.ToString() + "'AND Type='" + type + "';";
+                Console.WriteLine(cmd.CommandText);
+                cmd.ExecuteNonQuery();
+                con.Close();
+            }
+            catch (Exception e)
+            {
+                if (con.State == System.Data.ConnectionState.Open)
+                    con.Close();
+
+                Console.WriteLine("[RemoveOrderFromDatabase] Exeception Caught: " + e.Message);
             }
         }
 
