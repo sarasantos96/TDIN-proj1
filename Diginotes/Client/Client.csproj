@@ -48,6 +48,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Admin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Admin.Designer.cs">
+      <DependentUpon>Admin.cs</DependentUpon>
+    </Compile>
     <Compile Include="ChangeOrder.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -59,6 +65,12 @@
     </Compile>
     <Compile Include="ConfirmOrders.Designer.cs">
       <DependentUpon>ConfirmOrders.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CreateDiginote.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CreateDiginote.Designer.cs">
+      <DependentUpon>CreateDiginote.cs</DependentUpon>
     </Compile>
     <Compile Include="Dashboard.cs">
       <SubType>Form</SubType>
@@ -98,11 +110,17 @@
     <Compile Include="Wallet.Designer.cs">
       <DependentUpon>Wallet.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Admin.resx">
+      <DependentUpon>Admin.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ChangeOrder.resx">
       <DependentUpon>ChangeOrder.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ConfirmOrders.resx">
       <DependentUpon>ConfirmOrders.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CreateDiginote.resx">
+      <DependentUpon>CreateDiginote.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dashboard.resx">
       <DependentUpon>Dashboard.cs</DependentUpon>

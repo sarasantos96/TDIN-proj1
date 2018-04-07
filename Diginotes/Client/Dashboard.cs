@@ -69,9 +69,6 @@ namespace Client
                     }
                     break;
 
-                case EventType.NewMessage:
-                    break;
-
                 case EventType.DeleteOrder:
                     if (item.Order.Owner.Username.Equals(UserLogged.Username))
                     {

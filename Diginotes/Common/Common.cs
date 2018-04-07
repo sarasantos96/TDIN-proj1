@@ -120,6 +120,8 @@ namespace Common
         void cancelPendingOrder(Order order);
         void NotifyDeleteOrder(Order order);
         void ChangeAvailabilityOrders(User user, Boolean availability);
+        List<Order> getPendingOrders();
+        List<User> GetAllUsernames();
     }
 
     public enum EventType { QuoteChanged, NewOrder, CompleteOrder, IncompleteOrder,NewMessage, DeleteOrder};

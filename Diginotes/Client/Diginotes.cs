@@ -31,6 +31,14 @@ namespace Client
             User logResult = null;
             TextBox usernameBox = this.Controls["textboxusername"] as TextBox;
             TextBox passwordBox = this.Controls["textboxpassword"] as TextBox;
+
+            if(usernameBox.Text.Equals("admin") && passwordBox.Text.Equals("admin"))
+            {
+                this.Close();
+                new Admin().Show();
+                return;
+            }
+
             if (!usernameBox.Text.Equals("") && !passwordBox.Text.Equals(""))
                 logResult = r.CheckLogin(usernameBox.Text, passwordBox.Text);
 
@@ -38,7 +46,10 @@ namespace Client
             {
                 this.Close();
                 new Dashboard(logResult).Show();
+                return;
             }
+
+            return;
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

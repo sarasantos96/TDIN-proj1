@@ -416,16 +416,15 @@ namespace Registry
                     Boolean transaction = DoTransaction(order, el);
                     order.Quantity = order.Quantity - el.Quantity;
                     int temp = el.Quantity - aux;
-                    el.Timestamp = orders.ElementAt(i).Timestamp;
-                    orders.RemoveAt(i);
+                    
                     if (temp > 0)
                     {
                         Order old = new Order(el.Type, el.Owner, el.Quantity);
                         old.Timestamp = el.Timestamp;
                         el.Quantity = temp;
-                        NotifyIncompleteOrder(el, old);
-                        UpdateOrderInDatabase(el);
                         el.Timestamp = DateTime.Now;
+                        NotifyIncompleteOrder(el, old);
+                        UpdateOrderInDatabase(el, old.Timestamp.ToString());
                         orders.Add(el);
                     }
                     else
@@ -433,6 +432,7 @@ namespace Registry
                         NotifyCompleteOrder(el);
                         RemoveOrderFromDatabase(el);
                     }
+                    orders.RemoveAt(i);
                     break;
                 }
                 i++;
@@ -451,10 +451,6 @@ namespace Registry
                 if (order.Quantity > 0)
                 {
                     AddOrder(order);
-                }
-                else
-                {
-                    NotifyCompleteOrder(order);
                 }
             }
         }
@@ -497,7 +493,7 @@ namespace Registry
             }
         }
 
-        public void UpdateOrderInDatabase(Order order)
+        public void UpdateOrderInDatabase(Order order, String oldTimestamp)
         {
             try
             {
@@ -517,7 +513,7 @@ namespace Registry
                 }
 
                 con.Open();
-                cmd.CommandText = "UPDATE [Order] SET Quantity= " + order.Quantity + ", TimeStamp='" + DateTime.Now + "' WHERE Owner='" + order.Owner.Username + "' AND Type='" + type + "' AND TimeStamp='" + order.Timestamp.ToString() + "';";
+                cmd.CommandText = "UPDATE [Order] SET Quantity= " + order.Quantity + ", TimeStamp='" + order.Timestamp + "' WHERE Owner='" + order.Owner.Username + "' AND Type='" + type + "' AND TimeStamp='" + oldTimestamp + "';";
                 cmd.ExecuteNonQuery();
                 con.Close();
             }
@@ -562,6 +558,43 @@ namespace Registry
 
                 Console.WriteLine("[RemoveOrderFromDatabase] Exeception Caught: " + e.Message);
             }
+        }
+
+        public List<User> GetAllUsernames()
+        {
+            List<User> users = new List<User>();
+            User user;
+
+            try
+            {
+                //DATABASE
+                System.Data.SqlClient.SqlCommand cmd = new System.Data.SqlClient.SqlCommand();
+                cmd.CommandType = System.Data.CommandType.Text;
+                cmd.CommandText = "SELECT Username FROM [User];";
+                cmd.Connection = con;
+
+                con.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        user = new User(reader.GetString(0), "","");
+                        users.Add(user);
+                    }
+                    reader.Close();
+                }
+                con.Close();
+            }
+            catch (Exception e)
+            {
+                if (con.State == System.Data.ConnectionState.Open)
+                    con.Close();
+
+                Console.WriteLine("[GetAllUsernames] Exeception Caught: " + e.Message);
+            }
+
+            return users;
         }
 
         public List<Order> GetUserPendingOrders(User user)
@@ -643,23 +676,8 @@ namespace Registry
                 w.WriteLine(log);
                 w.Close();
             }
-            //AddTransactionLog(log);
 
             return success;
-        }
-
-        public void AddTransactionLog(string log)
-        {
-            string path = System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\log.txt";
-
-            if (!File.Exists(path))
-                File.Create(path);
-
-            using (StreamWriter w = File.AppendText(path))
-            {
-                w.WriteLine(log);
-                w.Close();
-            }
         }
 
         public void cancelPendingOrder(Order order)
@@ -671,6 +689,8 @@ namespace Registry
                     orders.RemoveAt(i);
                 i++;
             }
+            RemoveOrderFromDatabase(order);
+            NotifyDeleteOrder(order);
         }
 
         public void NotifyDeleteOrder(Order order)
@@ -686,6 +706,11 @@ namespace Registry
                 if (o.Owner.Username.Equals(user.Username))
                     o.Available = availability;
             }
+        }
+
+        public List<Order> getPendingOrders()
+        {
+            return this.orders;
         }
     }
 }
