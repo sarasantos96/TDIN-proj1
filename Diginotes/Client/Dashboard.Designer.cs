@@ -44,6 +44,8 @@
             this.changeOfferButton = new System.Windows.Forms.Button();
             this.cancelOrderButton = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -149,19 +151,21 @@
             // messageView
             // 
             this.messageView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.Messages});
+            this.Messages,
+            this.columnHeader1,
+            this.columnHeader2});
             this.messageView.GridLines = true;
             this.messageView.Location = new System.Drawing.Point(25, 188);
             this.messageView.Name = "messageView";
             this.messageView.Size = new System.Drawing.Size(366, 172);
             this.messageView.TabIndex = 9;
             this.messageView.UseCompatibleStateImageBehavior = false;
-            this.messageView.View = System.Windows.Forms.View.SmallIcon;
+            this.messageView.View = System.Windows.Forms.View.Details;
             // 
             // Messages
             // 
-            this.Messages.Text = "Messages";
-            this.Messages.Width = 334;
+            this.Messages.Text = "";
+            this.Messages.Width = 116;
             // 
             // changeOfferButton
             // 
@@ -193,6 +197,16 @@
             this.pictureBox1.TabIndex = 12;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "Type";
+            this.columnHeader1.Width = 123;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "Quantitiy";
+            this.columnHeader2.Width = 68;
             // 
             // Dashboard
             // 
@@ -237,5 +251,7 @@
         private System.Windows.Forms.Button changeOfferButton;
         private System.Windows.Forms.Button cancelOrderButton;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.ColumnHeader columnHeader1;
+        private System.Windows.Forms.ColumnHeader columnHeader2;
     }
 }

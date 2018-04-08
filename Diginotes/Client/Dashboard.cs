@@ -57,7 +57,7 @@ namespace Client
                     if (item.Order.Owner.Username.Equals(UserLogged.Username))
                     {
                         OnCompleteOrder(item.Order);
-                        WriteMessage("Transaction Completed: " + item.Order.Type.ToString() );
+                        WriteMessage("Complete",item.Order);
                     }
                     break;
 
@@ -65,7 +65,7 @@ namespace Client
                     if (item.Order.Owner.Username.Equals(UserLogged.Username))
                     {
                         OnIncompleteOrder(item.Order, item.OldOrder);
-                        WriteMessage("Partial Transaction: " + item.Order.Type.ToString() );
+                        WriteMessage("Partial",item.Order);
                     }
                     break;
 
@@ -179,13 +179,15 @@ namespace Client
             }
         }
 
-        void WriteMessage(string message)
+        void WriteMessage(string message, Order order)
         {
             ListViewItem i = new ListViewItem(message);
+            i.SubItems.Add(order.Type.ToString());
+            i.SubItems.Add(order.Quantity.ToString());
             
             if (messageView.InvokeRequired)
             {
-                messageView.BeginInvoke((MethodInvoker)delegate () { messageView.Items.Add(i); });
+                messageView.BeginInvoke((MethodInvoker)delegate () {messageView.Items.Add(i);});
             }
             else
             {
